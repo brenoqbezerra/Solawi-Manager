@@ -1,0 +1,7 @@
+{
+  "name": "Solawi Manager v2",
+  "description": "Sistema de gestão agrícola moderno para pequenos produtores e cooperativas. Planejamento de colheitas, previsão do tempo e alertas inteligentes.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
