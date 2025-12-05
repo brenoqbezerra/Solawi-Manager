@@ -20,3 +20,9 @@ O **Solawi Manager v2** é uma ferramenta de gestão agrícola projetada especif
 *   **UX Agrícola:** Botões grandes, alto contraste, indicação visual de status (Semáforo: Verde/Amarelo/Vermelho).
 *   **Inteligência Climática:** Integração nativa com previsão do tempo para auxiliar na decisão de plantio/colheita.
 *   **Zero Config:** O MVP roda localmente no navegador (LocalStorage), sem necessidade de configurar servidores complexos inicialmente.
+*   **Flexibilidade:** Suporte a colheitas parciais e anos fiscais cruzados (plantio num ano, colheita no outro).
+
+## 5. Arquitetura de Informação
+*   **Dashboard:** Visão imediata do que precisa de atenção.
+*   **Status:** "Verde" (Colher agora), "Amarelo" (Em breve), "Vermelho" (Atrasado).
+*   **Internacionalização:** Suporte a 5 idiomas, com foco em DE/EN.
