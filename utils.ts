@@ -39,18 +39,22 @@ export const getDateRangeOfWeek = (w: number, y: number, locale: string = 'de-DE
 };
 
 export const getStatusColor = (plantWeek: number, harvestWeek: number, harvestYear: number, currentWeek: number, currentYear: number, status: string) => {
-  if (status === 'HARVESTED') return 'blue';
+  if (status === 'HARVESTED') return 'blue'; // Colhido
 
-  if (currentYear > harvestYear) return 'red';
-  if (currentYear < harvestYear) return 'gray';
+  // Logic for active crops
+  if (currentYear > harvestYear) return 'red'; // Year passed
+  
+  // Future year
+  if (currentYear < harvestYear) return 'green'; // Growing/Planned
   
   // Same year logic
   const diff = harvestWeek - currentWeek;
   
-  if (diff < 0) return 'red'; // Overdue
-  if (diff === 0) return 'green'; // This week
-  if (diff <= 2) return 'yellow'; // Coming soon
-  return 'gray'; // Planned for future
+  if (diff < 0) return 'red'; // Overdue (Atrasado)
+  if (diff === 0) return 'yellow'; // This week (Esta semana)
+  
+  // Future weeks
+  return 'green'; // Active/Growing
 };
 
 export const generateId = () => Math.random().toString(36).substr(2, 9);

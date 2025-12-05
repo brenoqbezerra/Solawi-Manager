@@ -114,10 +114,26 @@ const Dashboard: React.FC = () => {
       ...crops.map(c => c.plantYear)
   ])).sort((a, b) => a - b);
 
-  // Filter crops based on logic
+  // KPIS Logic
   const activeCrops = crops.filter(c => c.status !== CropStatus.ARCHIVED && c.status !== CropStatus.HARVESTED);
-  const overdueCount = activeCrops.filter(c => getStatusColor(c.plantWeek, c.harvestWeek, c.harvestYear, currentWeek, currentYear, c.status) === 'red').length;
-  const inProgressCount = activeCrops.length;
+  
+  // 1. Total Active
+  const totalActiveCount = activeCrops.length;
+  
+  // 2. Due This Week
+  const dueThisWeekCount = activeCrops.filter(c => {
+      const color = getStatusColor(c.plantWeek, c.harvestWeek, c.harvestYear, currentWeek, currentYear, c.status);
+      return color === 'yellow';
+  }).length;
+
+  // 3. Overdue
+  const overdueCount = activeCrops.filter(c => {
+      const color = getStatusColor(c.plantWeek, c.harvestWeek, c.harvestYear, currentWeek, currentYear, c.status);
+      return color === 'red';
+  }).length;
+
+  // 4. Harvested
+  const harvestedCount = crops.filter(c => c.status === CropStatus.HARVESTED).length;
 
   // Chart Data Filtering
   const months = Array.from({ length: 12 }, (_, i) => {
@@ -161,22 +177,32 @@ const Dashboard: React.FC = () => {
           <p className="text-slate-500 font-medium mt-1">KW {currentWeek} • {currentYear}</p>
         </div>
         
-        {/* Quick Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
-             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between min-w-[110px]">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('inProgress')}</span>
-                <span className="text-2xl font-bold text-blue-600 mt-2">{inProgressCount}</span>
+        {/* Quick Stats Cards - 4 Columns */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
+             
+             {/* 1. Active Total */}
+             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
+                <span className={`text-xs font-bold uppercase tracking-wider ${totalActiveCount > 0 ? 'text-green-600' : 'text-slate-400'}`}>{t('inProgress')}</span>
+                <span className={`text-2xl font-bold mt-2 ${totalActiveCount > 0 ? 'text-green-700' : 'text-slate-700'}`}>{totalActiveCount}</span>
+             </div>
+
+             {/* 2. Due This Week */}
+             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
+                <span className={`text-xs font-bold uppercase tracking-wider ${dueThisWeekCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>{t('harvestThisWeek')}</span>
+                <span className={`text-2xl font-bold mt-2 ${dueThisWeekCount > 0 ? 'text-amber-700' : 'text-slate-700'}`}>{dueThisWeekCount}</span>
              </div>
              
+             {/* 3. Overdue */}
              <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${overdueCount > 0 ? 'text-red-600' : 'text-slate-400'}`}>{t('harvestOverdue')}</span>
                 <span className={`text-2xl font-bold mt-2 ${overdueCount > 0 ? 'text-red-600' : 'text-slate-700'}`}>{overdueCount}</span>
              </div>
              
-             <div className="hidden md:flex bg-green-50 p-4 rounded-xl border border-green-200 shadow-sm flex-col justify-between min-w-[110px]">
-                 <span className="text-xs font-bold text-green-600 uppercase tracking-wider">{t('harvested')}</span>
-                 <span className="text-2xl font-bold text-green-700 mt-2">
-                     {crops.filter(c => c.status === CropStatus.HARVESTED).length}
+             {/* 4. Harvested */}
+             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
+                 <span className={`text-xs font-bold uppercase tracking-wider ${harvestedCount > 0 ? 'text-blue-600' : 'text-slate-400'}`}>{t('harvested')}</span>
+                 <span className={`text-2xl font-bold mt-2 ${harvestedCount > 0 ? 'text-blue-700' : 'text-slate-700'}`}>
+                     {harvestedCount}
                  </span>
              </div>
         </div>
@@ -192,7 +218,7 @@ const Dashboard: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-slate-800 flex items-center gap-2">
                     <TrendingUp size={18} className="text-slate-400"/>
-                    {t('plannedHarvests')}
+                    {t('chartTitle')}
                 </h3>
                 <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
                     <Calendar size={14} className="text-slate-400"/>
@@ -217,9 +243,9 @@ const Dashboard: React.FC = () => {
                         cursor={{fill: '#f8fafc'}}
                         contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
                     />
-                    {/* Planned Bar */}
-                    <Bar dataKey="planned" name={t('planned')} fill="#e2e8f0" radius={[4, 4, 4, 4]} barSize={20} />
-                    {/* Realized Line */}
+                    {/* Planned Bar - Light Blue */}
+                    <Bar dataKey="planned" name={t('planned')} fill="#93c5fd" radius={[4, 4, 4, 4]} barSize={20} />
+                    {/* Realized Line - Green */}
                     <Line type="monotone" dataKey="realized" name={t('realized')} stroke="#15803d" strokeWidth={3} dot={{r: 4, fill: '#15803d', strokeWidth: 2, stroke: '#fff'}} />
                 </ComposedChart>
             </ResponsiveContainer>
@@ -270,10 +296,10 @@ const Dashboard: React.FC = () => {
                     
                     const statusLabels: Record<string, string> = {
                        red: t('harvestOverdue'),
-                       yellow: t('harvestSoon'),
-                       green: t('harvestDue'),
-                       gray: t('growing'),
-                       blue: t('harvested')
+                       yellow: t('harvestDue'), // Yellow is now "Due/This Week"
+                       green: t('growing'), // Green is Active/Growing
+                       blue: t('harvested'),
+                       gray: t('planned')
                     };
                     const colorClasses: Record<string, string> = {
                       red: 'bg-red-50 text-red-700 border-red-200 ring-red-500/20',
@@ -294,7 +320,7 @@ const Dashboard: React.FC = () => {
                         </td>
                         <td className="p-4 text-center">
                           <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset ${colorClasses[statusColor]}`}>
-                            {statusLabels[statusColor]}
+                            {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
                         <td className="p-4 hidden sm:table-cell text-sm text-slate-600 font-medium">

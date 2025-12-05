@@ -86,6 +86,23 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
     e.preventDefault();
     if (!isValid) return;
     
+    // Safety check for editing
+    if (initialData) {
+        const hasChanges = 
+            formData.name !== initialData.name ||
+            formData.variety !== initialData.variety ||
+            formData.location !== initialData.location ||
+            Number(formData.expectedYield) !== initialData.expectedYield ||
+            formData.unit !== initialData.unit ||
+            formData.notes !== (initialData.notes || '') ||
+            plantDateStr !== initialData.plantDateIso ||
+            harvestDateStr !== initialData.harvestDateIso;
+
+        if (hasChanges && !window.confirm(t('saveConfirm'))) {
+            return;
+        }
+    }
+
     const pDate = new Date(plantDateStr);
     const hDate = new Date(harvestDateStr);
 
@@ -164,7 +181,7 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
                     {/* Plant Date */}
                     <div className="space-y-2 cursor-pointer group" onClick={() => triggerPicker(plantInputRef)}>
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer pointer-events-none">
-                            <Calendar size={16} className="text-blue-600"/> {t('plantDate')} <span className="text-red-500">*</span>
+                            <Calendar size={18} className="text-slate-600"/> {t('plantDate')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <input 
@@ -187,7 +204,7 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
                     {/* Harvest Date */}
                     <div className="space-y-2 cursor-pointer group" onClick={() => triggerPicker(harvestInputRef)}>
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer pointer-events-none">
-                            <Calendar size={16} className="text-green-600"/> {t('harvestDate')} <span className="text-red-500">*</span>
+                            <Calendar size={18} className="text-slate-600"/> {t('harvestDate')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <input 
