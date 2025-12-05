@@ -6,9 +6,11 @@ import WeatherWidget from './WeatherWidget';
 import CropForm from './CropForm';
 import { useTranslation } from '../i18n';
 import { 
-  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Edit2, Calendar
+  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Edit2, Calendar, TrendingUp
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, YAxis } from 'recharts';
+import { 
+  ComposedChart, Line, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid 
+} from 'recharts';
 
 const Dashboard: React.FC = () => {
   const { t, lang } = useTranslation();
@@ -25,7 +27,7 @@ const Dashboard: React.FC = () => {
   
   // Harvest Modal State
   const [harvestModalCrop, setHarvestModalCrop] = useState<Crop | null>(null);
-  const [harvestAmount, setHarvestAmount] = useState<number>(0);
+  const [harvestAmount, setHarvestAmount] = useState<string>(''); // String to handle empty state
   
   const [geo] = useState({ lat: 52.52, lon: 13.405 }); 
 
@@ -47,7 +49,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop event from bubbling to the row click (if any)
+    e.stopPropagation();
     e.preventDefault();
     if(window.confirm(t('deleteConfirm'))) {
       const updated = storageService.deleteCrop(id);
@@ -59,26 +61,40 @@ const Dashboard: React.FC = () => {
       e.stopPropagation();
       e.preventDefault();
       setHarvestModalCrop(crop);
-      setHarvestAmount(crop.expectedYield || 0);
+      // Default to expected yield for quick "full harvest"
+      setHarvestAmount(crop.expectedYield.toString());
   };
 
-  const confirmHarvest = (type: 'FULL' | 'PARTIAL') => {
+  const confirmHarvest = () => {
       if (!harvestModalCrop) return;
+      
+      const amount = parseFloat(harvestAmount);
+      if (isNaN(amount) || amount < 0) return;
 
       let updatedCrop = { ...harvestModalCrop };
+      const currentExpected = updatedCrop.expectedYield || 0;
 
-      if (type === 'FULL') {
+      // Logic: If user harvested >= expected, assume DONE.
+      // If user harvested < expected, assume PARTIAL and update remainder.
+      
+      if (amount >= currentExpected) {
           updatedCrop.status = CropStatus.HARVESTED;
-          updatedCrop.actualYield = harvestAmount;
+          updatedCrop.actualYield = amount;
+          updatedCrop.expectedYield = 0; // Cleared
       } else {
-          // Partial: Reduce expected yield, keep active
-          updatedCrop.expectedYield = Math.max(0, (updatedCrop.expectedYield || 0) - harvestAmount);
+          // Partial
+          updatedCrop.status = CropStatus.ACTIVE; // Remains active
+          updatedCrop.expectedYield = parseFloat((currentExpected - amount).toFixed(1));
+          // We could track total harvested in a separate field in future, 
+          // for now we just reduce the expected yield pile.
       }
+
+      updatedCrop.harvestedAt = new Date().toISOString();
 
       const updated = storageService.saveCrop(updatedCrop);
       setCrops(updated);
       setHarvestModalCrop(null);
-      setHarvestAmount(0);
+      setHarvestAmount('');
   };
 
   const handleResetAll = (e: React.MouseEvent) => {
@@ -100,7 +116,6 @@ const Dashboard: React.FC = () => {
 
   // Filter crops based on logic
   const activeCrops = crops.filter(c => c.status !== CropStatus.ARCHIVED && c.status !== CropStatus.HARVESTED);
-  
   const overdueCount = activeCrops.filter(c => getStatusColor(c.plantWeek, c.harvestWeek, c.harvestYear, currentWeek, currentYear, c.status) === 'red').length;
   const inProgressCount = activeCrops.length;
 
@@ -111,22 +126,25 @@ const Dashboard: React.FC = () => {
   });
 
   const chartData = months.map((monthName, index) => {
-      const count = crops.filter(c => {
-          // Check if crop matches selected harvest year
+      // Logic: Filter by Harvest Year and Month
+      const relevantCrops = crops.filter(c => {
           if (c.harvestYear !== selectedYear) return false;
-          
-          // Calculate approx month from week
           const monthOfHarvest = Math.floor((c.harvestWeek - 1) / 4.33); 
-          return monthOfHarvest === index && c.status !== CropStatus.ARCHIVED;
-      }).length;
-      return { name: monthName, count };
+          return monthOfHarvest === index;
+      });
+
+      const planned = relevantCrops.length; // All crops planned for this month
+      const realized = relevantCrops.filter(c => c.status === CropStatus.HARVESTED).length; // Actual harvests
+
+      return { name: monthName, planned, realized };
   });
 
   // Table Filtering
   const filteredCrops = crops.filter(c => 
     c.status !== CropStatus.ARCHIVED && 
     (c.name.toLowerCase().includes(filter.toLowerCase()) || 
-    c.variety.toLowerCase().includes(filter.toLowerCase()))
+    c.variety.toLowerCase().includes(filter.toLowerCase()) || 
+    c.location.toLowerCase().includes(filter.toLowerCase()))
   ).sort((a,b) => {
       if (a.status === CropStatus.HARVESTED && b.status !== CropStatus.HARVESTED) return 1;
       if (a.status !== CropStatus.HARVESTED && b.status === CropStatus.HARVESTED) return -1;
@@ -172,7 +190,10 @@ const Dashboard: React.FC = () => {
         {/* Chart */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-slate-800">{t('plannedHarvests')}</h3>
+                <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <TrendingUp size={18} className="text-slate-400"/>
+                    {t('plannedHarvests')}
+                </h3>
                 <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
                     <Calendar size={14} className="text-slate-400"/>
                     <select 
@@ -186,22 +207,21 @@ const Dashboard: React.FC = () => {
                     </select>
                 </div>
             </div>
-            <div className="h-48 w-full">
+            <div className="h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                <XAxis dataKey="name" tick={{fontSize: 10, fill: '#94a3b8'}} tickLine={false} axisLine={false} interval={0} />
-                <YAxis hide={true} /> 
-                <Tooltip 
-                    cursor={{fill: '#f1f5f9'}}
-                    contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
-                    formatter={(value: number) => [value, t('quantity')]}
-                />
-                <Bar dataKey="count" radius={[4, 4, 4, 4]} barSize={32}>
-                    {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.count > 0 ? '#15803d' : '#e2e8f0'} />
-                    ))}
-                </Bar>
-                </BarChart>
+                <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="name" tick={{fontSize: 10, fill: '#94a3b8'}} tickLine={false} axisLine={false} interval={0} />
+                    <YAxis hide={true} />
+                    <Tooltip 
+                        cursor={{fill: '#f8fafc'}}
+                        contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
+                    />
+                    {/* Planned Bar */}
+                    <Bar dataKey="planned" name={t('planned')} fill="#e2e8f0" radius={[4, 4, 4, 4]} barSize={20} />
+                    {/* Realized Line */}
+                    <Line type="monotone" dataKey="realized" name={t('realized')} stroke="#15803d" strokeWidth={3} dot={{r: 4, fill: '#15803d', strokeWidth: 2, stroke: '#fff'}} />
+                </ComposedChart>
             </ResponsiveContainer>
             </div>
         </div>
@@ -266,12 +286,11 @@ const Dashboard: React.FC = () => {
                     const unitLabel = t(`unit_${crop.unit}` as any) || crop.unit;
 
                     return (
-                      <tr key={crop.id} className="hover:bg-slate-50/80 transition-colors group">
+                      <tr key={crop.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer" onClick={(e) => handleEdit(crop, e)}>
                         <td className="p-4">
                           <div className={`font-semibold ${crop.status === CropStatus.HARVESTED ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{crop.name}</div>
                           <div className="text-xs text-slate-500 font-medium">{crop.variety}</div>
                           {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate">{crop.notes}</div>}
-                          <div className="text-xs text-slate-400 sm:hidden mt-1 font-mono">KW {crop.harvestWeek}</div>
                         </td>
                         <td className="p-4 text-center">
                           <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset ${colorClasses[statusColor]}`}>
@@ -297,14 +316,6 @@ const Dashboard: React.FC = () => {
                                     <Tractor size={18} />
                                 </button>
                             )}
-                            {/* Edit Button */}
-                             <button 
-                              className="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all border border-blue-200"
-                              title={t('edit')}
-                              onClick={(e) => handleEdit(crop, e)}
-                            >
-                              <Edit2 size={18} />
-                            </button>
                             {/* Delete Button */}
                             <button 
                               className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
@@ -351,53 +362,47 @@ const Dashboard: React.FC = () => {
         />
       )}
 
-      {/* Harvest Modal Overlay */}
+      {/* Harvest Modal Overlay - Simplified */}
       {harvestModalCrop && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden scale-100 animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden scale-100 animate-in zoom-in-95 duration-200">
                 <div className="bg-green-700 p-4 flex justify-between items-center text-white">
                     <h3 className="font-bold text-lg flex items-center gap-2">
-                        <Tractor size={20} /> {t('harvestActionTitle')}
+                        <Tractor size={20} /> {t('harvest')}
                     </h3>
                     <button onClick={() => setHarvestModalCrop(null)} className="hover:bg-white/20 p-1 rounded-lg transition-colors">
                         <X size={20} />
                     </button>
                 </div>
                 <div className="p-6">
-                    <p className="text-slate-600 mb-4">
-                        {t('harvestActionDesc')} <strong>{harvestModalCrop.name}</strong>
+                    <p className="text-slate-600 mb-6 font-medium">
+                        {harvestModalCrop.name}
                     </p>
                     
-                    <div className="mb-6">
+                    <div className="mb-6 relative">
                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                            {t('amountHarvested')} ({t(`unit_${harvestModalCrop.unit}` as any) || harvestModalCrop.unit})
+                            {t('quantity')} ({t(`unit_${harvestModalCrop.unit}` as any) || harvestModalCrop.unit})
                         </label>
                         <input 
                             type="number" 
-                            className="w-full text-3xl font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 bg-white"
+                            className="w-full text-4xl font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 bg-transparent"
                             autoFocus
+                            placeholder="0"
                             value={harvestAmount}
-                            onChange={(e) => setHarvestAmount(parseFloat(e.target.value))}
+                            onChange={(e) => setHarvestAmount(e.target.value)}
                         />
-                        <div className="flex justify-between text-xs text-slate-400 mt-2">
-                             <span>{t('remainingAmount')}: {Math.max(0, (harvestModalCrop.expectedYield || 0) - harvestAmount)} {t(`unit_${harvestModalCrop.unit}` as any) || harvestModalCrop.unit}</span>
+                        <div className="mt-2 text-xs text-slate-400">
+                             {t('remainingAmount')}: <strong>{harvestModalCrop.expectedYield}</strong>
                         </div>
                     </div>
 
-                    <div className="space-y-3">
-                         <button 
-                            onClick={() => confirmHarvest('FULL')}
-                            className="w-full py-3 bg-green-700 hover:bg-green-800 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors"
-                        >
-                            <Check size={18} /> {t('harvestFull')}
-                        </button>
-                        <button 
-                            onClick={() => confirmHarvest('PARTIAL')}
-                            className="w-full py-3 bg-white border-2 border-green-700 text-green-700 hover:bg-green-50 font-bold rounded-xl transition-colors"
-                        >
-                             {t('harvestPartial')}
-                        </button>
-                    </div>
+                    <button 
+                        onClick={confirmHarvest}
+                        disabled={!harvestAmount}
+                        className="w-full py-3 bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-900/20"
+                    >
+                        <Check size={18} /> {t('confirm')}
+                    </button>
                 </div>
             </div>
         </div>

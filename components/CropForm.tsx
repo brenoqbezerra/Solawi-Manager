@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Crop, CropStatus } from '../types';
-import { generateId, getWeekNumber } from '../utils';
+import { generateId, getWeekNumber, getDateFromWeek } from '../utils';
 import { useTranslation } from '../i18n';
 import { Save, X, Calendar, MapPin, Scale, StickyNote } from 'lucide-react';
 
@@ -13,14 +13,18 @@ interface Props {
 const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
   const { t } = useTranslation();
   
+  // Use string ISO format for inputs: YYYY-MM-DD
   const [plantDateStr, setPlantDateStr] = useState<string>(new Date().toISOString().split('T')[0]);
   const [harvestDateStr, setHarvestDateStr] = useState<string>('');
   
+  const plantInputRef = useRef<HTMLInputElement>(null);
+  const harvestInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState<Partial<Crop>>({
     name: '',
     variety: '',
     location: '',
-    expectedYield: '' as unknown as number, // Start empty
+    expectedYield: '' as unknown as number,
     unit: 'kg',
     status: CropStatus.PLANNED,
     notes: ''
@@ -32,16 +36,23 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
         setFormData({
             ...initialData
         });
-        
-        // Convert KW back to approximate dates if strictly needed, 
-        // OR better: use the stored date ISO strings if we had them.
-        // For now, since we only stored KW/Year in previous versions, we might default 
-        // to current date OR if we have valid ISO logic.
-        // But since we didn't store ISO dates in the Crop interface before this update, 
-        // we might reset dates or keep them if it's a new record.
-        // *Correction*: In the previous step we didn't save ISO dates to the interface.
-        // Let's rely on the user re-selecting dates or default to today for simplicity in this MVP upgrade.
-        // Ideally, we should update the Crop interface to store ISO dates.
+
+        // Date recovery logic
+        if (initialData.plantDateIso) {
+            setPlantDateStr(initialData.plantDateIso);
+        } else if (initialData.plantWeek && initialData.plantYear) {
+            // Fallback for legacy data
+            const d = getDateFromWeek(initialData.plantWeek, initialData.plantYear);
+            setPlantDateStr(d.toISOString().split('T')[0]);
+        }
+
+        if (initialData.harvestDateIso) {
+            setHarvestDateStr(initialData.harvestDateIso);
+        } else if (initialData.harvestWeek && initialData.harvestYear) {
+             // Fallback for legacy data
+             const d = getDateFromWeek(initialData.harvestWeek, initialData.harvestYear);
+             setHarvestDateStr(d.toISOString().split('T')[0]);
+        }
     }
   }, [initialData]);
 
@@ -88,14 +99,29 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
       status: initialData?.status || CropStatus.PLANNED,
       plantWeek: getWeekNumber(pDate),
       plantYear: pDate.getFullYear(),
+      plantDateIso: plantDateStr,
       harvestWeek: getWeekNumber(hDate),
       harvestYear: hDate.getFullYear(),
+      harvestDateIso: harvestDateStr,
       notes: formData.notes || ''
     });
   };
 
+  // Helper to trigger date picker on container click
+  const triggerPicker = (ref: React.RefObject<HTMLInputElement>) => {
+    if (ref.current && 'showPicker' in ref.current) {
+        try {
+            (ref.current as any).showPicker();
+        } catch (e) {
+            ref.current.focus();
+        }
+    } else {
+        ref.current?.focus();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden scale-100 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
         
         <div className="bg-gradient-to-r from-green-700 to-green-800 px-6 py-4 border-b border-green-600 flex justify-between items-center sticky top-0 z-10">
@@ -136,19 +162,21 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
             <div className="bg-blue-50/50 rounded-xl p-5 border border-blue-100 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Plant Date */}
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                    <div className="space-y-2 cursor-pointer group" onClick={() => triggerPicker(plantInputRef)}>
+                        <label className="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer pointer-events-none">
                             <Calendar size={16} className="text-blue-600"/> {t('plantDate')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <input 
+                                ref={plantInputRef}
                                 type="date"
                                 required
                                 className="w-full rounded-lg border-slate-300 border bg-white p-3 text-slate-900 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm font-medium cursor-pointer"
                                 value={plantDateStr}
                                 onChange={e => setPlantDateStr(e.target.value)}
+                                onClick={(e) => { e.stopPropagation(); try{ (e.target as HTMLInputElement).showPicker() } catch(e){} }}
                             />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none bg-white pl-2">
+                            <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none bg-white pl-2">
                                 <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">
                                     KW {plantKW}
                                 </span>
@@ -157,20 +185,22 @@ const CropForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => {
                     </div>
                     
                     {/* Harvest Date */}
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                    <div className="space-y-2 cursor-pointer group" onClick={() => triggerPicker(harvestInputRef)}>
+                        <label className="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer pointer-events-none">
                             <Calendar size={16} className="text-green-600"/> {t('harvestDate')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <input 
+                                ref={harvestInputRef}
                                 type="date"
                                 required
                                 className="w-full rounded-lg border-slate-300 border bg-white p-3 text-slate-900 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm font-medium cursor-pointer"
                                 value={harvestDateStr}
                                 onChange={e => setHarvestDateStr(e.target.value)}
+                                onClick={(e) => { e.stopPropagation(); try{ (e.target as HTMLInputElement).showPicker() } catch(e){} }}
                             />
                             {harvestKW && (
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none bg-white pl-2">
+                                <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none bg-white pl-2">
                                     <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">
                                         KW {harvestKW}
                                     </span>

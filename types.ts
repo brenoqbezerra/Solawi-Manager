@@ -11,8 +11,10 @@ export interface Crop {
   variety: string; // Sorte (e.g., Nantaise)
   plantWeek: number; // KW
   plantYear: number;
+  plantDateIso?: string; // YYYY-MM-DD for easier editing
   harvestWeek: number; // KW
   harvestYear: number;
+  harvestDateIso?: string; // YYYY-MM-DD for easier editing
   location: string; // Standort
   expectedYield: number; // Menge in kg/units
   unit: string; // kg, bund, stück

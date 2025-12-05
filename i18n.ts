@@ -66,7 +66,9 @@ const translations = {
     notes: "Notizen",
     notesPlaceholder: "Optionale Notizen hier...",
     year: "Jahr",
-    editCrop: "Kultur bearbeiten"
+    editCrop: "Kultur bearbeiten",
+    planned: "Geplant",
+    realized: "Realisiert"
   },
   en: {
     dashboard: "Dashboard",
@@ -132,7 +134,9 @@ const translations = {
     notes: "Notes",
     notesPlaceholder: "Optional notes here...",
     year: "Year",
-    editCrop: "Edit Crop"
+    editCrop: "Edit Crop",
+    planned: "Planned",
+    realized: "Realized"
   },
   es: {
     dashboard: "Panel",
@@ -198,7 +202,9 @@ const translations = {
     notes: "Notas",
     notesPlaceholder: "Notas opcionales aquí...",
     year: "Año",
-    editCrop: "Editar Cultivo"
+    editCrop: "Editar Cultivo",
+    planned: "Planificado",
+    realized: "Realizado"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -264,7 +270,9 @@ const translations = {
     notes: "Notes",
     notesPlaceholder: "Notes optionnelles...",
     year: "Année",
-    editCrop: "Modifier Culture"
+    editCrop: "Modifier Culture",
+    planned: "Prévu",
+    realized: "Réalisé"
   },
   pt: {
     dashboard: "Painel",
@@ -330,7 +338,9 @@ const translations = {
     notes: "Anotações",
     notesPlaceholder: "Anotações opcionais aqui...",
     year: "Ano",
-    editCrop: "Editar Cultivo"
+    editCrop: "Editar Cultivo",
+    planned: "Planejado",
+    realized: "Realizado"
   }
 };
 

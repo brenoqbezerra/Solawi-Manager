@@ -9,6 +9,18 @@ export const getWeekNumber = (d: Date = new Date()): number => {
 
 export const getYear = (): number => new Date().getFullYear();
 
+// Helper to get a date object from Week and Year (approximate, Monday of that week)
+export const getDateFromWeek = (w: number, y: number): Date => {
+  const simple = new Date(y, 0, 1 + (w - 1) * 7);
+  const dow = simple.getDay();
+  const ISOweekStart = simple;
+  if (dow <= 4)
+      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+  else
+      ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+  return ISOweekStart;
+};
+
 // Returns a formatted string "DD.MMM - DD.MMM" for a given week/year
 export const getDateRangeOfWeek = (w: number, y: number, locale: string = 'de-DE'): string => {
   const d = new Date(y, 0, 1 + (w - 1) * 7);
