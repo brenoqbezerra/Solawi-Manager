@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const { lang, setLang } = useTranslation();
+  const { lang, setLang, t } = useTranslation();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +34,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-green-100 selection:text-green-900">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-green-100 selection:text-green-900 flex flex-col">
       {/* Navbar with Color */}
       <header className="bg-gradient-to-r from-green-800 to-green-700 text-white shadow-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -84,9 +84,17 @@ const Layout: React.FC<Props> = ({ children }) => {
         </div>
       </header>
 
-      <main>
+      <main className="flex-grow">
         {children}
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-6 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 text-center text-slate-400 text-sm flex flex-col items-center gap-1">
+            <p>{t('developedBy')} <span className="font-semibold text-slate-600">Breno Bezerra</span></p>
+            <a href="mailto:bqbreno@gmail.com" className="hover:text-green-700 transition-colors font-medium">bqbreno@gmail.com</a>
+        </div>
+      </footer>
     </div>
   );
 };

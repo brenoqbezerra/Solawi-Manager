@@ -73,7 +73,8 @@ const translations = {
     saveConfirm: "Änderungen speichern?",
     harvestThisWeek: "Ernte diese Woche",
     plantMonth: "Pflanzmonat",
-    harvestMonth: "Erntemonat"
+    harvestMonth: "Erntemonat",
+    developedBy: "Entwickelt von"
   },
   en: {
     dashboard: "Dashboard",
@@ -146,7 +147,8 @@ const translations = {
     saveConfirm: "Save changes?",
     harvestThisWeek: "Harvest This Week",
     plantMonth: "Plant Month",
-    harvestMonth: "Harvest Month"
+    harvestMonth: "Harvest Month",
+    developedBy: "Developed by"
   },
   es: {
     dashboard: "Panel",
@@ -219,7 +221,8 @@ const translations = {
     saveConfirm: "¿Guardar cambios?",
     harvestThisWeek: "Cosecha esta semana",
     plantMonth: "Mes Siembra",
-    harvestMonth: "Mes Cosecha"
+    harvestMonth: "Mes Cosecha",
+    developedBy: "Desarrollado por"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -292,7 +295,8 @@ const translations = {
     saveConfirm: "Enregistrer les modifications ?",
     harvestThisWeek: "Récolte cette semaine",
     plantMonth: "Mois Plantation",
-    harvestMonth: "Mois Récolte"
+    harvestMonth: "Mois Récolte",
+    developedBy: "Développé par"
   },
   pt: {
     dashboard: "Painel",
@@ -365,7 +369,8 @@ const translations = {
     saveConfirm: "Salvar alterações?",
     harvestThisWeek: "Colheita esta semana",
     plantMonth: "Mês Plantio",
-    harvestMonth: "Mês Colheita"
+    harvestMonth: "Mês Colheita",
+    developedBy: "Desenvolvido por"
   }
 };
 
