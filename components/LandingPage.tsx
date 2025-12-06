@@ -212,40 +212,20 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         <div className="border-t border-slate-200 w-full h-full"></div>
                                     </div>
 
-                                    {/* Line Chart Overlay (Simulated with SVG) */}
-                                    <svg className="absolute inset-0 w-full h-40 top-0 pointer-events-none z-20" preserveAspectRatio="none">
-                                        <polyline 
-                                            fill="none" 
-                                            stroke="#15803d" 
-                                            strokeWidth="2"
-                                            points="
-                                                0,100  30,80  60,110 
-                                                90,40  120,80  150,55 
-                                                180,25  210,60  240,90 
-                                                270,120  300,140  330,150
-                                            "
-                                            className="opacity-80"
-                                            vectorEffect="non-scaling-stroke"
-                                        />
-                                    </svg>
-
                                     {[
-                                        { p: 40, r: 42 }, { p: 60, r: 58 }, { p: 30, r: 35 }, 
-                                        { p: 80, r: 75 }, { p: 50, r: 50 }, { p: 70, r: 65 }, 
-                                        { p: 90, r: 85 }, { p: 60, r: 62 }, { p: 40, r: 38 }, 
-                                        { p: 20, r: 25 }, { p: 10, r: 12 }, { p: 5, r: 5 }
+                                        { p: 40 }, { p: 60 }, { p: 30 }, 
+                                        { p: 80 }, { p: 50 }, { p: 70 }, 
+                                        { p: 90 }, { p: 60 }, { p: 40 }, 
+                                        { p: 20 }, { p: 10 }, { p: 5 }
                                     ].map((val, i) => {
                                         // Dynamic Month Name based on Language
                                         const monthName = new Date(2024, i, 1).toLocaleString(lang === 'de' ? 'de-DE' : lang, { month: 'short' });
                                         return (
                                             <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
-                                                {/* Bar & Line Container */}
+                                                {/* Bar Container */}
                                                 <div className="relative w-full h-full flex items-end">
                                                     {/* Bar (Planned) */}
                                                     <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80 mx-auto" style={{ height: `${val.p}%` }}></div>
-                                                    
-                                                    {/* Dot Point (Realized) */}
-                                                    <div className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-30" style={{ bottom: `${val.r}%` }}></div>
                                                 </div>
                                                 
                                                 {/* Month Label - Properly Aligned Below */}
