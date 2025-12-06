@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from './i18n';
 import { Language } from './types';
-import { Sprout, Globe } from 'lucide-react';
+import { Sprout, ChevronDown } from 'lucide-react';
 
 interface Props {
   children: React.ReactNode;
@@ -9,34 +9,76 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { lang, setLang } = useTranslation();
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const languages = [
+    { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { code: 'en', label: 'English', flag: '🇺🇸' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'pt', label: 'Português', flag: '🇧🇷' }
+  ];
+
+  const currentLang = languages.find(l => l.code === lang) || languages[0];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-green-100 selection:text-green-900">
       {/* Navbar with Color */}
       <header className="bg-gradient-to-r from-green-800 to-green-700 text-white shadow-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-             <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm border border-white/10">
-               <Sprout className="text-green-100 w-6 h-6" />
+          <div className="flex items-center gap-2 md:gap-3">
+             <div className="bg-white/10 p-1.5 md:p-2 rounded-lg backdrop-blur-sm border border-white/10">
+               <Sprout className="text-green-100 w-5 h-5 md:w-6 md:h-6" />
              </div>
-             <span className="font-bold text-xl tracking-tight text-white">Solawi<span className="text-green-200">Manager</span></span>
+             <span className="font-bold text-lg md:text-xl tracking-tight text-white truncate">Solawi<span className="text-green-200">Manager</span></span>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 backdrop-blur-sm hover:bg-white/20 transition-colors cursor-pointer group">
-              <Globe className="w-4 h-4 text-green-100 group-hover:text-white" />
-              <select 
-                value={lang} 
-                onChange={(e) => setLang(e.target.value as Language)}
-                className="bg-transparent outline-none text-green-50 font-medium text-sm cursor-pointer appearance-none pr-4"
-                style={{backgroundImage: 'none'}}
-              >
-                <option value="de" className="text-slate-900">Deutsch</option>
-                <option value="en" className="text-slate-900">English</option>
-                <option value="es" className="text-slate-900">Español</option>
-                <option value="fr" className="text-slate-900">Français</option>
-                <option value="pt" className="text-slate-900">Português</option>
-              </select>
+            {/* Custom Language Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+                <button 
+                    onClick={() => setIsLangOpen(!isLangOpen)}
+                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg pl-3 pr-2 py-1.5 backdrop-blur-sm transition-all duration-200"
+                >
+                    <span className="text-lg leading-none">{currentLang.flag}</span>
+                    <span className="hidden md:inline text-sm font-medium text-white">{currentLang.label}</span>
+                    <ChevronDown size={14} className={`text-green-100 transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isLangOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-100 origin-top-right">
+                        <ul className="py-1">
+                            {languages.map((l) => (
+                                <li key={l.code}>
+                                    <button 
+                                        onClick={() => {
+                                            setLang(l.code as Language);
+                                            setIsLangOpen(false);
+                                        }}
+                                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 hover:bg-slate-50 transition-colors
+                                            ${lang === l.code ? 'bg-green-50 text-green-700 font-semibold' : 'text-slate-700'}
+                                        `}
+                                    >
+                                        <span className="text-lg">{l.flag}</span>
+                                        {l.label}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
           </div>
         </div>

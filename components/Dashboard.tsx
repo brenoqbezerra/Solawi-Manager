@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Crop, CropStatus } from '../types';
 import { storageService } from '../services/storageService';
 import { getWeekNumber, getYear, getStatusColor } from '../utils';
@@ -6,15 +6,16 @@ import WeatherWidget from './WeatherWidget';
 import CropForm from './CropForm';
 import { useTranslation } from '../i18n';
 import { 
-  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Edit2, Calendar, TrendingUp
+  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Calendar, TrendingUp, ChevronDown
 } from 'lucide-react';
 import { 
-  ComposedChart, Line, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid 
+  ComposedChart, Line, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid 
 } from 'recharts';
 
 const Dashboard: React.FC = () => {
   const { t, lang } = useTranslation();
   const [crops, setCrops] = useState<Crop[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
   
   // UI States
   const [showForm, setShowForm] = useState(false);
@@ -24,6 +25,8 @@ const Dashboard: React.FC = () => {
   // Chart Year Filter State
   const currentYear = getYear();
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const yearDropdownRef = useRef<HTMLDivElement>(null);
   
   // Harvest Modal State
   const [harvestModalCrop, setHarvestModalCrop] = useState<Crop | null>(null);
@@ -31,8 +34,22 @@ const Dashboard: React.FC = () => {
   
   const [geo] = useState({ lat: 52.52, lon: 13.405 }); 
 
+  // Seed data on mount & set mounted flag to prevent chart crash
   useEffect(() => {
-    setCrops(storageService.getCrops());
+    const loaded = storageService.seedInitialData();
+    setCrops(loaded);
+    setIsMounted(true); // Fix for Recharts width error
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target as Node)) {
+            setIsYearDropdownOpen(false);
+        }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleSaveCrop = (newCrop: Crop) => {
@@ -112,7 +129,7 @@ const Dashboard: React.FC = () => {
       currentYear, 
       ...crops.map(c => c.harvestYear), 
       ...crops.map(c => c.plantYear)
-  ])).sort((a, b) => a - b);
+  ])).sort((a, b) => b - a); // Descending
 
   // KPIS Logic
   const activeCrops = crops.filter(c => c.status !== CropStatus.ARCHIVED && c.status !== CropStatus.HARVESTED);
@@ -145,7 +162,13 @@ const Dashboard: React.FC = () => {
       // Logic: Filter by Harvest Year and Month
       const relevantCrops = crops.filter(c => {
           if (c.harvestYear !== selectedYear) return false;
-          const monthOfHarvest = Math.floor((c.harvestWeek - 1) / 4.33); 
+          // Calculate month of harvest (approx based on week or date)
+          let monthOfHarvest = 0;
+          if (c.harvestDateIso) {
+              monthOfHarvest = new Date(c.harvestDateIso).getMonth();
+          } else {
+              monthOfHarvest = Math.floor((c.harvestWeek - 1) / 4.33);
+          }
           return monthOfHarvest === index;
       });
 
@@ -218,37 +241,66 @@ const Dashboard: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-slate-800 flex items-center gap-2">
                     <TrendingUp size={18} className="text-slate-400"/>
-                    {t('chartTitle')}
+                    <span className="hidden md:inline">{t('chartTitle')}</span>
+                    <span className="md:hidden">{t('planned')} vs {t('realized')}</span>
                 </h3>
-                <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
-                    <Calendar size={14} className="text-slate-400"/>
-                    <select 
-                        className="bg-transparent text-sm font-semibold text-slate-600 outline-none cursor-pointer"
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(Number(e.target.value))}
+                
+                {/* Modern Year Filter Dropdown */}
+                <div className="relative" ref={yearDropdownRef}>
+                    <button 
+                        onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}
+                        className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 transition-all text-sm font-semibold text-slate-600"
                     >
-                        {availableYears.map(year => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </select>
+                        <Calendar size={14} className="text-slate-400"/>
+                        {selectedYear}
+                        <ChevronDown size={14} className={`text-slate-400 transition-transform ${isYearDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {isYearDropdownOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-20 animate-in fade-in zoom-in-95 duration-100">
+                            <ul className="py-1">
+                                {availableYears.map((year) => (
+                                    <li key={year}>
+                                        <button 
+                                            onClick={() => {
+                                                setSelectedYear(year);
+                                                setIsYearDropdownOpen(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors
+                                                ${selectedYear === year ? 'bg-green-50 text-green-700 font-semibold' : 'text-slate-700'}
+                                            `}
+                                        >
+                                            {year}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className="h-56 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="name" tick={{fontSize: 10, fill: '#94a3b8'}} tickLine={false} axisLine={false} interval={0} />
-                    <YAxis hide={true} />
-                    <Tooltip 
-                        cursor={{fill: '#f8fafc'}}
-                        contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
-                    />
-                    {/* Planned Bar - Light Blue */}
-                    <Bar dataKey="planned" name={t('planned')} fill="#93c5fd" radius={[4, 4, 4, 4]} barSize={20} />
-                    {/* Realized Line - Green */}
-                    <Line type="monotone" dataKey="realized" name={t('realized')} stroke="#15803d" strokeWidth={3} dot={{r: 4, fill: '#15803d', strokeWidth: 2, stroke: '#fff'}} />
-                </ComposedChart>
-            </ResponsiveContainer>
+            
+            {/* Chart Container - Fixed height with minHeight and debounce to prevent crash */}
+            <div className="w-full h-48 md:h-64" style={{ minHeight: '192px' }}>
+                {isMounted ? (
+                    <ResponsiveContainer width="100%" height="100%" debounce={100}>
+                        <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                            <XAxis dataKey="name" tick={{fontSize: 10, fill: '#94a3b8'}} tickLine={false} axisLine={false} interval={0} />
+                            <YAxis hide={true} />
+                            <Tooltip 
+                                cursor={{fill: '#f8fafc'}}
+                                contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
+                            />
+                            <Bar dataKey="planned" name={t('planned')} fill="#93c5fd" radius={[4, 4, 4, 4]} barSize={20} />
+                            <Line type="monotone" dataKey="realized" name={t('realized')} stroke="#15803d" strokeWidth={3} dot={{r: 4, fill: '#15803d', strokeWidth: 2, stroke: '#fff'}} />
+                        </ComposedChart>
+                    </ResponsiveContainer>
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-xl">
+                        <span className="text-slate-400 text-sm">Loading Chart...</span>
+                    </div>
+                )}
             </div>
         </div>
 
@@ -285,9 +337,11 @@ const Dashboard: React.FC = () => {
                 <tbody className="divide-y divide-slate-50">
                   {filteredCrops.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="p-12 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
-                         <Tractor size={48} className="opacity-20" />
-                         <span>{t('noCrops')}</span>
+                      <td colSpan={5} className="p-12 text-center text-slate-400">
+                         <div className="flex flex-col items-center justify-center gap-3 w-full">
+                            <Tractor size={48} className="opacity-20" />
+                            <span>{t('noCrops')}</span>
+                         </div>
                       </td>
                     </tr>
                   )}
@@ -296,8 +350,8 @@ const Dashboard: React.FC = () => {
                     
                     const statusLabels: Record<string, string> = {
                        red: t('harvestOverdue'),
-                       yellow: t('harvestDue'), // Yellow is now "Due/This Week"
-                       green: t('growing'), // Green is Active/Growing
+                       yellow: t('harvestDue'),
+                       green: t('growing'),
                        blue: t('harvested'),
                        gray: t('planned')
                     };
@@ -414,6 +468,7 @@ const Dashboard: React.FC = () => {
                             className="w-full text-4xl font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 bg-transparent"
                             autoFocus
                             placeholder="0"
+                            style={{ backgroundColor: '#ffffff', color: '#1e293b' }}
                             value={harvestAmount}
                             onChange={(e) => setHarvestAmount(e.target.value)}
                         />

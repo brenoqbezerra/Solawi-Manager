@@ -1,0 +1,19 @@
+/* 
+  Estilos globais básicos. 
+  O Tailwind está sendo carregado via CDN no index.html para evitar erros de compilação.
+*/
+
+body {
+  background-color: #f8fafc; /* bg-slate-50 equivalent */
+  color: #0f172a; /* text-slate-900 equivalent */
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom scrollbar for table containers */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

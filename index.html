@@ -4,39 +4,75 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solawi Manager v2</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Sistema de gestão agrícola moderno para pequenos produtores.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- TAILWIND CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    
+    <!-- Estilos Forçados para Scrollbar e Inputs -->
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #F8FAFC;
+      /* Scrollbar Verde Personalizada */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
       }
-      /* Custom scrollbar for table containers */
-      .scrollbar-hide::-webkit-scrollbar {
-          display: none;
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9; 
+        border-radius: 4px;
       }
-      .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+      ::-webkit-scrollbar-thumb {
+        background: #15803d; /* Green-700 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #166534; /* Green-800 */
+      }
+
+      /* Forçar inputs brancos mesmo em modo escuro */
+      input, select, textarea {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        color-scheme: light !important;
+      }
+      
+      /* Ajuste para mobile tap highlight */
+      * {
+        -webkit-tap-highlight-color: transparent;
       }
     </style>
-  <script type="importmap">
+
+    <script type="importmap">
 {
   "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.1/client",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
     "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
     "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
     "vite": "https://aistudiocdn.com/vite@^7.2.6",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
   }
 }
 </script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
