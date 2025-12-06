@@ -32,13 +32,24 @@ const Dashboard: React.FC = () => {
   const [harvestModalCrop, setHarvestModalCrop] = useState<Crop | null>(null);
   const [harvestAmount, setHarvestAmount] = useState<string>(''); // String to handle empty state
   
-  const [geo] = useState({ lat: 52.52, lon: 13.405 }); 
+  const [geo, setGeo] = useState({ lat: 52.52, lon: 13.405 }); // Default Berlin
 
-  // Seed data on mount & set mounted flag to prevent chart crash
+  // Seed data & Geo
   useEffect(() => {
     const loaded = storageService.seedInitialData();
     setCrops(loaded);
-    setIsMounted(true); // Fix for Recharts width error
+    setIsMounted(true);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                setGeo({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+            },
+            (err) => {
+                console.warn("Location access denied or error:", err);
+            }
+        );
+    }
   }, []);
 
   // Close dropdown when clicking outside
@@ -190,6 +201,11 @@ const Dashboard: React.FC = () => {
       return a.harvestWeek - b.harvestWeek;
   });
 
+  const getMonthNameFromIso = (iso?: string) => {
+      if (!iso) return '-';
+      return new Date(iso).toLocaleDateString(lang === 'de' ? 'de-DE' : lang, { month: 'short' });
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-6 pb-32 space-y-8">
       
@@ -200,30 +216,29 @@ const Dashboard: React.FC = () => {
           <p className="text-slate-500 font-medium mt-1">KW {currentWeek} • {currentYear}</p>
         </div>
         
-        {/* Quick Stats Cards - 4 Columns */}
-        {/* Force h-32 (128px) height on all cards for consistency across devices */}
+        {/* Quick Stats Cards - Centered Text */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
              
              {/* 1. Active Total */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${totalActiveCount > 0 ? 'text-green-600' : 'text-slate-400'}`}>{t('inProgress')}</span>
                 <span className={`text-3xl font-bold ${totalActiveCount > 0 ? 'text-green-700' : 'text-slate-700'}`}>{totalActiveCount}</span>
              </div>
 
              {/* 2. Due This Week */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${dueThisWeekCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>{t('harvestThisWeek')}</span>
                 <span className={`text-3xl font-bold ${dueThisWeekCount > 0 ? 'text-amber-700' : 'text-slate-700'}`}>{dueThisWeekCount}</span>
              </div>
              
              {/* 3. Overdue */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${overdueCount > 0 ? 'text-red-600' : 'text-slate-400'}`}>{t('harvestOverdue')}</span>
                 <span className={`text-3xl font-bold ${overdueCount > 0 ? 'text-red-600' : 'text-slate-700'}`}>{overdueCount}</span>
              </div>
              
              {/* 4. Harvested */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
                  <span className={`text-xs font-bold uppercase tracking-wider ${harvestedCount > 0 ? 'text-blue-600' : 'text-slate-400'}`}>{t('harvested')}</span>
                  <span className={`text-3xl font-bold ${harvestedCount > 0 ? 'text-blue-700' : 'text-slate-700'}`}>
                      {harvestedCount}
@@ -281,7 +296,7 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
             
-            {/* Chart Container - Fixed height with minHeight and debounce to prevent crash */}
+            {/* Chart Container */}
             <div className="w-full h-48 md:h-64" style={{ minHeight: '192px' }}>
                 {isMounted ? (
                     <ResponsiveContainer width="100%" height="100%" debounce={100}>
@@ -325,21 +340,22 @@ const Dashboard: React.FC = () => {
           {/* Table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              {/* min-w-[800px] ensures horizontal scrolling triggers on mobile */}
-              <table className="w-full text-left min-w-[800px]">
+              <table className="w-full text-left min-w-[1000px] border-collapse">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('culture')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{t('status')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('location')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('harvestWeek')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('culture')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('plantMonth')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestMonth')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('status')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('location')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestWeek')}</th>
                     <th className="p-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {filteredCrops.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="p-12 text-center text-slate-400">
+                      <td colSpan={7} className="p-12 text-center text-slate-400">
                          <div className="flex flex-col items-center justify-center gap-3 w-full">
                             <Tractor size={48} className="opacity-20" />
                             <span>{t('noCrops')}</span>
@@ -369,20 +385,26 @@ const Dashboard: React.FC = () => {
 
                     return (
                       <tr key={crop.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer" onClick={(e) => handleEdit(crop, e)}>
-                        <td className="p-4">
+                        <td className="p-4 border-r border-slate-50">
                           <div className={`font-semibold ${crop.status === CropStatus.HARVESTED ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{crop.name}</div>
                           <div className="text-xs text-slate-500 font-medium">{crop.variety}</div>
                           {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate">{crop.notes}</div>}
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50">
+                            {getMonthNameFromIso(crop.plantDateIso)}
+                        </td>
+                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50">
+                            {getMonthNameFromIso(crop.harvestDateIso)}
+                        </td>
+                        <td className="p-4 text-center border-r border-slate-50">
                           <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset ${colorClasses[statusColor]}`}>
                             {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-medium">
+                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50">
                           {crop.location}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-mono">
+                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50">
                           KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>

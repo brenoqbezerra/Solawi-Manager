@@ -71,7 +71,9 @@ const translations = {
     realized: "Realisiert",
     chartTitle: "Ernteübersicht: Geplant vs. Realisiert",
     saveConfirm: "Änderungen speichern?",
-    harvestThisWeek: "Ernte diese Woche"
+    harvestThisWeek: "Ernte diese Woche",
+    plantMonth: "Pflanzmonat",
+    harvestMonth: "Erntemonat"
   },
   en: {
     dashboard: "Dashboard",
@@ -142,7 +144,9 @@ const translations = {
     realized: "Realized",
     chartTitle: "Harvest Overview: Planned vs Realized",
     saveConfirm: "Save changes?",
-    harvestThisWeek: "Harvest This Week"
+    harvestThisWeek: "Harvest This Week",
+    plantMonth: "Plant Month",
+    harvestMonth: "Harvest Month"
   },
   es: {
     dashboard: "Panel",
@@ -213,7 +217,9 @@ const translations = {
     realized: "Realizado",
     chartTitle: "Resumen: Planificado vs Realizado",
     saveConfirm: "¿Guardar cambios?",
-    harvestThisWeek: "Cosecha esta semana"
+    harvestThisWeek: "Cosecha esta semana",
+    plantMonth: "Mes Siembra",
+    harvestMonth: "Mes Cosecha"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -284,7 +290,9 @@ const translations = {
     realized: "Réalisé",
     chartTitle: "Aperçu: Prévu vs Réalisé",
     saveConfirm: "Enregistrer les modifications ?",
-    harvestThisWeek: "Récolte cette semaine"
+    harvestThisWeek: "Récolte cette semaine",
+    plantMonth: "Mois Plantation",
+    harvestMonth: "Mois Récolte"
   },
   pt: {
     dashboard: "Painel",
@@ -355,7 +363,9 @@ const translations = {
     realized: "Realizado",
     chartTitle: "Visão Geral: Planejado x Realizado",
     saveConfirm: "Salvar alterações?",
-    harvestThisWeek: "Colheita esta semana"
+    harvestThisWeek: "Colheita esta semana",
+    plantMonth: "Mês Plantio",
+    harvestMonth: "Mês Colheita"
   }
 };
 
