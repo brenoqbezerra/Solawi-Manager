@@ -85,7 +85,7 @@ const translations = {
     lp_cta_github: "Quellcode ansehen",
     lp_story_title: "Entstanden aus Beobachtung, Neugier und dem Wunsch zu helfen",
     lp_story_wandel: "Am Rande Dresdens, zwischen Roggenfeldern, Schafherden und dem Hühnerwald des Wandelgrunds, entstand die Frage: Wie kann Technologie die Arbeit auf dem Hof vereinfachen — ohne sie zu überlagern?",
-    lp_story_wirgarten: "Bei der Recherche stieß ich auf die kluge, analoge Anbauplanung von WirGarten — eine Vorlage, die ich digitalisieren wollte, um sie zugänglicher und mehrsprachig zu machen.",
+    lp_story_wirgarten: "Bei der Recherche über Genossenschaften in Deutschland stieß ich auf das beeindruckende Projekt WirGarten. Inspiriert davon habe ich eine von ihnen erstellte und frei verfügbare Anbauplanung digitalisiert.",
     lp_story_mvp: "Ein MVP — bewusst einfach, lokal gespeichert, ohne Login. Nicht perfekt, aber nützlich. Und bereit, mit Ihrer Hilfe zu wachsen.",
     lp_global_reach: "Verfügbar in Deutsch, English, Español, Français, Português — denn gute Ideen für solidarische Landwirtschaft kennen keine Grenzen.",
     lp_feat_dashboard: "Dashboard mit Echtzeit-Übersicht (Aktive Kulturen, Geplante Ernten)",
@@ -93,8 +93,8 @@ const translations = {
     lp_feat_harvest: "Erfassung von Ernten mit Menge und Datum",
     lp_feat_weather: "7-Tage-Wettervorhersage + autom. Standort",
     lp_feat_responsive: "Vollständig responsiv — für die Nutzung auf dem Feld",
-    lp_footer_links: "Inspiration & Freunde:",
-    lp_start_now: "Jetzt starten"
+    lp_footer_links: "Inspiration:",
+    lp_start_now: "Das System kennenlernen"
   },
   en: {
     // Existing Dashboard Keys
@@ -179,7 +179,7 @@ const translations = {
     lp_cta_github: "View Source",
     lp_story_title: "Created from observation, curiosity, and the desire to help",
     lp_story_wandel: "On the outskirts of Dresden, between rye fields, sheep herds, and the chicken forest of Wandelgrund, the question arose: How can technology simplify work on the farm — without overshadowing it?",
-    lp_story_wirgarten: "During research, I came across the clever, analog crop planning of WirGarten — a template I wanted to digitize to make it more accessible and multilingual.",
+    lp_story_wirgarten: "Researching cooperatives in Germany, I found an amazing project called WirGarten and was inspired to digitize a crop planning tool created by them and made available for free.",
     lp_story_mvp: "An MVP — consciously simple, stored locally, no login. Not perfect, but useful. And ready to grow with your help.",
     lp_global_reach: "Available in German, English, Spanish, French, Portuguese — because good ideas for solidarity agriculture know no borders.",
     lp_feat_dashboard: "Dashboard with real-time overview (Active Crops, Planned Harvests)",
@@ -187,8 +187,8 @@ const translations = {
     lp_feat_harvest: "Harvest recording with quantity and date",
     lp_feat_weather: "7-day weather forecast + auto location",
     lp_feat_responsive: "Fully responsive — for use directly in the field",
-    lp_footer_links: "Inspiration & Friends:",
-    lp_start_now: "Start Now"
+    lp_footer_links: "Inspiration:",
+    lp_start_now: "Explore the System"
   },
   es: {
     // Existing Dashboard Keys
@@ -273,7 +273,7 @@ const translations = {
     lp_cta_github: "Ver Código",
     lp_story_title: "Concebido a partir de la observación, curiosidad y el deseo de ayudar",
     lp_story_wandel: "En las afueras de Dresde, entre campos de centeno, rebaños de ovejas y el bosque de pollos de Wandelgrund, surgió la pregunta: ¿Cómo puede la tecnología simplificar el trabajo en la granja, sin eclipsarlo?",
-    lp_story_wirgarten: "Durante la investigación, encontré la inteligente planificación analógica de WirGarten — una plantilla que quería digitalizar para hacerla más accesible y multilingüe.",
+    lp_story_wirgarten: "Investigando sobre cooperativas en Alemania, encontré un proyecto increíble llamado WirGarten y decidí inspirarme para digitalizar una herramienta de planificación de cultivos creada por ellos y disponible gratuitamente.",
     lp_story_mvp: "Un MVP — conscientemente simples, almacenado localmente, sin inicio de sesión. No es perfecto, pero es útil. Y listo para crecer con tu ayuda.",
     lp_global_reach: "Disponible en alemán, inglés, español, francés y portugués — porque las buenas ideas para la agricultura solidaria no conocen fronteras.",
     lp_feat_dashboard: "Panel con vista en tiempo real (Cultivos activos, Cosechas planificadas)",
@@ -281,8 +281,8 @@ const translations = {
     lp_feat_harvest: "Registro de cosechas con cantidad y fecha",
     lp_feat_weather: "Pronóstico del tiempo de 7 días + ubicación automática",
     lp_feat_responsive: "Totalmente responsivo — para uso directo en el campo",
-    lp_footer_links: "Inspiración y Amigos:",
-    lp_start_now: "Comenzar Ahora"
+    lp_footer_links: "Inspiración:",
+    lp_start_now: "Conocer el Sistema"
   },
   fr: {
     // Existing Dashboard Keys
@@ -367,7 +367,7 @@ const translations = {
     lp_cta_github: "Voir le Code",
     lp_story_title: "Né de l'observation, de la curiosité et du désir d'aider",
     lp_story_wandel: "À la périphérie de Dresde, entre champs de seigle, troupeaux de moutons et la forêt de poulets de Wandelgrund, la question s'est posée : Comment la technologie peut-elle simplifier le travail à la ferme — sans l'éclipser ?",
-    lp_story_wirgarten: "Lors de mes recherches, je suis tombé sur la planification analogique intelligente de WirGarten — un modèle que je voulais numériser pour le rendre plus accessible et multilingue.",
+    lp_story_wirgarten: "En faisant des recherches sur les coopératives en Allemagne, j'ai découvert un projet incroyable appelé WirGarten et je me suis inspiré pour numériser un outil de planification des cultures créé par eux et mis à disposition gratuitement.",
     lp_story_mvp: "Un MVP — consciemment simple, stocké localement, sans connexion. Pas parfait, mais utile. Et prêt à grandir avec votre aide.",
     lp_global_reach: "Disponible en allemand, anglais, espagnol, français et portugais — car les bonnes idées pour l'agriculture solidaire ne connaissent pas de frontières.",
     lp_feat_dashboard: "Tableau de bord temps réel (Cultures actives, Récoltes prévues)",
@@ -375,8 +375,8 @@ const translations = {
     lp_feat_harvest: "Enregistrement des récoltes avec quantité et date",
     lp_feat_weather: "Prévisions météo à 7 jours + localisation auto",
     lp_feat_responsive: "Entièrement réactif — pour une utilisation directe au champ",
-    lp_footer_links: "Inspiration & Amis:",
-    lp_start_now: "Commencer"
+    lp_footer_links: "Inspiration:",
+    lp_start_now: "Découvrir le Système"
   },
   pt: {
     // Existing Dashboard Keys
@@ -455,13 +455,13 @@ const translations = {
     backToLanding: "Página Inicial",
 
     // Landing Page Keys
-    lp_hero_title: "Planejamento de Cultivo Simples para Agricultura Solidária",
+    lp_hero_title: "Planejamento de Cultivo Simples para Agricultura Solidaria",
     lp_hero_subtitle: "Ferramenta gratuita e local para CSAs e pequenas fazendas. Offline-first, multilíngue e focada no essencial.",
     lp_cta_start: "Testar o Sistema",
     lp_cta_github: "Ver Código",
     lp_story_title: "Concebido a partir da observação, curiosidade e desejo de ajudar",
     lp_story_wandel: "Nos arredores de Dresden, entre campos de centeio, rebanhos de ovelhas e a floresta de galinhas do Wandelgrund, surgiu a pergunta: Como a tecnologia pode simplificar o trabalho na fazenda — sem ofuscá-lo?",
-    lp_story_wirgarten: "Durante a pesquisa, encontrei o inteligente planejamento analógico do WirGarten — um modelo que quis digitalizar para tornar mais acessível e multilíngue.",
+    lp_story_wirgarten: "Pesquisando sobre o mundo das Cooperativas na Alemanha, encontrei um projeto incrível chamado WirGarten e resolvi me inspirar para digitalizar uma ferramenta de planejamento de cultivo criada por eles e disponibilizada gratuitamente.",
     lp_story_mvp: "Um MVP — conscientemente simples, salvo localmente, sem login. Não é perfeito, mas é útil. E pronto para crescer com sua ajuda.",
     lp_global_reach: "Disponível em Alemão, Inglês, Espanhol, Francês e Português — porque boas ideias para agricultura solidária não conhecem fronteiras.",
     lp_feat_dashboard: "Dashboard com visão em tempo real (Cultivos Ativos, Colheitas Planejadas)",
@@ -469,8 +469,8 @@ const translations = {
     lp_feat_harvest: "Registro de colheitas com quantidade e data",
     lp_feat_weather: "Previsão do tempo de 7 dias + localização automática",
     lp_feat_responsive: "Totalmente responsivo — para uso direto no campo",
-    lp_footer_links: "Inspiração & Amigos:",
-    lp_start_now: "Começar Agora"
+    lp_footer_links: "Inspiração:",
+    lp_start_now: "Conhecer o Sistema"
   }
 };
 

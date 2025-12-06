@@ -6,12 +6,22 @@ import LandingPage from './components/LandingPage';
 const App: React.FC = () => {
   const [view, setView] = useState<'landing' | 'app'>('landing');
 
+  const goToApp = () => {
+      setView('app');
+      window.scrollTo(0, 0);
+  };
+
+  const goToLanding = () => {
+      setView('landing');
+      window.scrollTo(0, 0);
+  };
+
   if (view === 'landing') {
-    return <LandingPage onStart={() => setView('app')} />;
+    return <LandingPage onStart={goToApp} />;
   }
 
   return (
-    <Layout onGoHome={() => setView('landing')}>
+    <Layout onGoHome={goToLanding}>
       <Dashboard />
     </Layout>
   );

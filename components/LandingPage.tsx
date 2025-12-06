@@ -94,7 +94,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
       <main className="flex-grow">
         
         {/* Hero Section */}
-        <section className="relative pt-20 pb-32 overflow-hidden">
+        <section className="relative pt-20 pb-20 overflow-hidden">
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-100/40 via-slate-50 to-slate-50"></div>
             
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
@@ -128,34 +128,59 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                     </a>
                 </div>
 
-                {/* Visual Dashboard Mockup (CSS Only) */}
-                <div className="relative w-full max-w-5xl mx-auto perspective-1000">
-                    <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform rotate-x-6 transition-transform duration-700 hover:rotate-0">
-                        {/* Mock Header */}
-                        <div className="h-12 bg-green-700 w-full flex items-center px-4 gap-2">
-                             <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                             <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                             <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                {/* Simulated Dashboard UI (CSS populated) - Replacing the "Blank" dashboard */}
+                <div className="relative w-full max-w-4xl mx-auto">
+                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
+                        {/* Fake Header */}
+                        <div className="h-12 bg-white border-b border-slate-100 flex items-center px-6 gap-4">
+                            <div className="w-20 h-4 bg-slate-100 rounded animate-pulse"></div>
+                            <div className="flex-1"></div>
+                            <div className="w-8 h-8 bg-green-100 rounded-full"></div>
                         </div>
-                        {/* Mock Content */}
-                        <div className="p-6 bg-slate-50 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {/* Mock Chart */}
-                            <div className="col-span-2 bg-white h-64 rounded-xl border border-slate-200 p-4 shadow-sm flex items-end justify-between gap-2">
-                                {[40, 60, 30, 80, 50, 90, 70, 45, 60, 75, 50, 80].map((h, i) => (
-                                    <div key={i} className="w-full bg-green-100 rounded-t-sm relative group">
-                                        <div className="absolute bottom-0 left-0 right-0 bg-green-500 rounded-t-sm transition-all duration-1000" style={{ height: `${h}%` }}></div>
-                                    </div>
-                                ))}
-                            </div>
-                            {/* Mock KPI Cards */}
-                            <div className="space-y-4">
-                                <div className="h-28 bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-center items-center">
-                                    <div className="w-8 h-8 bg-green-100 rounded-full mb-2"></div>
-                                    <div className="h-4 w-16 bg-slate-100 rounded"></div>
+                        
+                        <div className="p-6 bg-slate-50/50 space-y-6">
+                            {/* KPI Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold">12</div>
+                                    <div className="h-2 w-24 bg-slate-100 rounded"></div>
                                 </div>
-                                <div className="h-28 bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-center items-center">
-                                     <div className="w-8 h-8 bg-amber-100 rounded-full mb-2"></div>
-                                     <div className="h-4 w-16 bg-slate-100 rounded"></div>
+                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 shadow-sm flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold">3</div>
+                                    <div className="h-2 w-24 bg-amber-200/50 rounded"></div>
+                                </div>
+                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">85</div>
+                                    <div className="h-2 w-24 bg-slate-100 rounded"></div>
+                                </div>
+                            </div>
+
+                            {/* Main Content Area */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {/* Simulated Chart */}
+                                <div className="col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm h-64 flex flex-col justify-end gap-2">
+                                     <div className="flex items-end justify-between gap-2 h-40">
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[40%]"></div>
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[60%]"></div>
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[30%]"></div>
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[80%]"></div>
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[50%]"></div>
+                                        <div className="w-full bg-blue-200 rounded-t-sm h-[90%]"></div>
+                                     </div>
+                                     <div className="w-full h-1 bg-slate-100 mt-2"></div>
+                                </div>
+                                
+                                {/* Simulated List */}
+                                <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="flex items-center gap-3 p-2 border-b border-slate-50 last:border-0">
+                                            <div className="w-8 h-8 bg-slate-100 rounded-full"></div>
+                                            <div className="flex-1 space-y-1">
+                                                <div className="h-2 w-20 bg-slate-100 rounded"></div>
+                                                <div className="h-2 w-12 bg-slate-50 rounded"></div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -222,7 +247,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                  <div className="mt-16 text-center">
                     <button 
                         onClick={onStart}
-                        className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-lg py-4 px-12 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
+                        className="bg-green-700 hover:bg-green-800 text-white font-bold text-lg py-4 px-12 rounded-full shadow-xl transition-all hover:scale-105 active:scale-95"
                     >
                         {t('lp_start_now')}
                     </button>
