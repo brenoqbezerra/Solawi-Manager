@@ -196,8 +196,19 @@ const Dashboard: React.FC = () => {
     c.variety.toLowerCase().includes(filter.toLowerCase()) || 
     c.location.toLowerCase().includes(filter.toLowerCase()))
   ).sort((a,b) => {
-      if (a.status === CropStatus.HARVESTED && b.status !== CropStatus.HARVESTED) return 1;
-      if (a.status !== CropStatus.HARVESTED && b.status === CropStatus.HARVESTED) return -1;
+      // Priority sort: Overdue -> This Week -> Active -> Harvested -> Future
+      const getColor = (crop: Crop) => getStatusColor(crop.plantWeek, crop.harvestWeek, crop.harvestYear, currentWeek, currentYear, crop.status);
+      const colorA = getColor(a);
+      const colorB = getColor(b);
+      
+      const colorOrder = { 'red': 0, 'yellow': 1, 'green': 2, 'blue': 3, 'gray': 4 };
+      
+      // @ts-ignore
+      if (colorOrder[colorA] !== colorOrder[colorB]) {
+          // @ts-ignore
+          return colorOrder[colorA] - colorOrder[colorB];
+      }
+      
       return a.harvestWeek - b.harvestWeek;
   });
 
@@ -373,38 +384,48 @@ const Dashboard: React.FC = () => {
                        blue: t('harvested'),
                        gray: t('planned')
                     };
-                    const colorClasses: Record<string, string> = {
+                    const badgeColorClasses: Record<string, string> = {
                       red: 'bg-red-50 text-red-700 border-red-200 ring-red-500/20',
                       yellow: 'bg-amber-50 text-amber-700 border-amber-200 ring-amber-500/20',
                       green: 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-500/20',
                       gray: 'bg-slate-100 text-slate-600 border-slate-200',
                       blue: 'bg-blue-50 text-blue-700 border-blue-200'
                     };
+
+                    // Row Highlight Logic
+                    let rowClasses = "transition-colors group cursor-pointer ";
+                    if (statusColor === 'red') {
+                        rowClasses += "bg-red-50 hover:bg-red-100 border-l-4 border-l-red-500";
+                    } else if (statusColor === 'yellow') {
+                        rowClasses += "bg-amber-50 hover:bg-amber-100 border-l-4 border-l-amber-500";
+                    } else {
+                        rowClasses += "hover:bg-slate-50/80 border-l-4 border-l-transparent";
+                    }
                     
                     const unitLabel = t(`unit_${crop.unit}` as any) || crop.unit;
 
                     return (
-                      <tr key={crop.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer" onClick={(e) => handleEdit(crop, e)}>
-                        <td className="p-4 border-r border-slate-50">
+                      <tr key={crop.id} className={rowClasses} onClick={(e) => handleEdit(crop, e)}>
+                        <td className="p-4 border-r border-slate-50/50">
                           <div className={`font-semibold ${crop.status === CropStatus.HARVESTED ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{crop.name}</div>
                           <div className="text-xs text-slate-500 font-medium">{crop.variety}</div>
                           {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate">{crop.notes}</div>}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50">
+                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50">
                             {getMonthNameFromIso(crop.plantDateIso)}
                         </td>
-                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50">
+                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50">
                             {getMonthNameFromIso(crop.harvestDateIso)}
                         </td>
-                        <td className="p-4 text-center border-r border-slate-50">
-                          <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset ${colorClasses[statusColor]}`}>
+                        <td className="p-4 text-center border-r border-slate-50/50">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset ${badgeColorClasses[statusColor]}`}>
                             {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50">
+                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50/50">
                           {crop.location}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50">
+                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50/50">
                           KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>
@@ -413,7 +434,7 @@ const Dashboard: React.FC = () => {
                              {/* Harvest Button */}
                             {crop.status !== CropStatus.HARVESTED && (
                                 <button 
-                                    className="p-2 text-green-700 bg-green-50 rounded-lg hover:bg-green-100 hover:shadow-sm transition-all border border-green-200" 
+                                    className="p-2 text-green-700 bg-white/50 hover:bg-green-100 rounded-lg transition-all border border-green-200" 
                                     title={t('harvest')}
                                     onClick={(e) => openHarvestModal(crop, e)}
                                 >
@@ -422,7 +443,7 @@ const Dashboard: React.FC = () => {
                             )}
                             {/* Delete Button */}
                             <button 
-                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-100/50 rounded-lg transition-all"
                               title={t('delete')}
                               onClick={(e) => handleDelete(crop.id, e)}
                             >

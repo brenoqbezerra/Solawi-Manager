@@ -3,8 +3,43 @@ import { getWeekNumber, getDateFromWeek } from '../utils';
 
 const KEY = 'solawi_crops_v2';
 
+// Helper to generate dynamic dates relative to today
+const getRelativeDate = (weekOffset: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + (weekOffset * 7));
+    return {
+        date: d,
+        iso: d.toISOString().split('T')[0],
+        week: getWeekNumber(d),
+        year: d.getFullYear()
+    };
+};
+
+const now = getRelativeDate(0); // This week
+const past = getRelativeDate(-2); // 2 weeks ago
+const future2025 = { year: 2025 };
+const future2026 = { year: 2026 };
+
 const MOCK_DATA: Crop[] = [
-  // JANEIRO / FEVEREIRO (Inverno/Início)
+  // --- DINÂMICOS (PARA TESTAR ALERTAS VISUAIS) ---
+  {
+      id: 'dynamic-due-now', name: 'Rucola', variety: 'Speedy', location: 'Tunnel 2',
+      expectedYield: 40, unit: 'kg', status: CropStatus.ACTIVE,
+      plantWeek: now.week - 6, plantYear: now.year, 
+      harvestWeek: now.week, harvestYear: now.year, // CAI NA SEMANA ATUAL (AMARELO)
+      plantDateIso: getRelativeDate(-6).iso, harvestDateIso: now.iso,
+      notes: "Colheita urgente esta semana!"
+  },
+  {
+      id: 'dynamic-overdue', name: 'Spinat', variety: 'Matador', location: 'Feld 3',
+      expectedYield: 60, unit: 'kg', status: CropStatus.ACTIVE,
+      plantWeek: past.week - 8, plantYear: past.year,
+      harvestWeek: past.week, harvestYear: past.year, // CAI NO PASSADO (VERMELHO)
+      plantDateIso: getRelativeDate(-10).iso, harvestDateIso: past.iso,
+      notes: "Atenção: Já deveria ter sido colhido."
+  },
+
+  // --- HISTÓRICO 2024 ---
   {
     id: 'mock-1', name: 'Feldsalat', variety: 'Vit', location: 'Gewächshaus A',
     expectedYield: 50, unit: 'kg', status: CropStatus.HARVESTED,
@@ -12,88 +47,44 @@ const MOCK_DATA: Crop[] = [
     plantDateIso: '2023-11-06', harvestDateIso: '2024-01-29', actualYield: 52, harvestedAt: '2024-01-30'
   },
   {
-    id: 'mock-2', name: 'Winterpostelein', variety: 'Glanz', location: 'Tunnel 1',
-    expectedYield: 30, unit: 'kg', status: CropStatus.HARVESTED,
-    plantWeek: 48, plantYear: 2023, harvestWeek: 8, harvestYear: 2024,
-    plantDateIso: '2023-11-27', harvestDateIso: '2024-02-19', actualYield: 28, harvestedAt: '2024-02-20'
-  },
-  // MARÇO / ABRIL (Primavera)
-  {
     id: 'mock-3', name: 'Radieschen', variety: 'Sora', location: 'Feld 1',
     expectedYield: 200, unit: 'bund', status: CropStatus.HARVESTED,
     plantWeek: 10, plantYear: 2024, harvestWeek: 16, harvestYear: 2024,
     plantDateIso: '2024-03-04', harvestDateIso: '2024-04-15', actualYield: 195, harvestedAt: '2024-04-16'
   },
   {
-    id: 'mock-4', name: 'Spinat', variety: 'Matador', location: 'Feld 2',
-    expectedYield: 80, unit: 'kg', status: CropStatus.HARVESTED,
-    plantWeek: 11, plantYear: 2024, harvestWeek: 18, harvestYear: 2024,
-    plantDateIso: '2024-03-11', harvestDateIso: '2024-04-29', actualYield: 85, harvestedAt: '2024-04-30'
-  },
-  // MAIO / JUNHO
-  {
-    id: 'mock-5', name: 'Kohlrabi', variety: 'Superschmelz', location: 'Feld 3',
-    expectedYield: 150, unit: 'units', status: CropStatus.HARVESTED,
-    plantWeek: 14, plantYear: 2024, harvestWeek: 22, harvestYear: 2024,
-    plantDateIso: '2024-04-01', harvestDateIso: '2024-05-27', actualYield: 148, harvestedAt: '2024-05-28'
-  },
-  {
-    id: 'mock-6', name: 'Erdbeeren', variety: 'Senga Sengana', location: 'Beet 5',
-    expectedYield: 60, unit: 'kg', status: CropStatus.HARVESTED,
-    plantWeek: 36, plantYear: 2023, harvestWeek: 24, harvestYear: 2024,
-    plantDateIso: '2023-09-04', harvestDateIso: '2024-06-10', actualYield: 55, harvestedAt: '2024-06-12'
-  },
-  // JULHO / AGOSTO (Verão)
-  {
     id: 'mock-7', name: 'Tomaten', variety: 'Harzfeuer', location: 'Gewächshaus B',
     expectedYield: 300, unit: 'kg', status: CropStatus.HARVESTED,
     plantWeek: 16, plantYear: 2024, harvestWeek: 30, harvestYear: 2024,
     plantDateIso: '2024-04-15', harvestDateIso: '2024-07-22', actualYield: 310, harvestedAt: '2024-07-25'
   },
+
+  // --- FUTURO 2025 ---
   {
-    id: 'mock-8', name: 'Zucchini', variety: 'Diamant', location: 'Feld 4',
-    expectedYield: 120, unit: 'units', status: CropStatus.HARVESTED,
-    plantWeek: 20, plantYear: 2024, harvestWeek: 32, harvestYear: 2024,
-    plantDateIso: '2024-05-13', harvestDateIso: '2024-08-05', actualYield: 115, harvestedAt: '2024-08-06'
-  },
-  // SETEMBRO / OUTUBRO (Outono)
-  {
-    id: 'mock-9', name: 'Kartoffeln', variety: 'Belana', location: 'Acker West',
-    expectedYield: 1000, unit: 'kg', status: CropStatus.ACTIVE,
-    plantWeek: 15, plantYear: 2024, harvestWeek: 38, harvestYear: 2024,
-    plantDateIso: '2024-04-08', harvestDateIso: '2024-09-16'
+    id: 'future-2025-1', name: 'Frühkartoffeln', variety: 'Annabelle', location: 'Acker Süd',
+    expectedYield: 800, unit: 'kg', status: CropStatus.PLANNED,
+    plantWeek: 12, plantYear: 2025, harvestWeek: 26, harvestYear: 2025,
+    plantDateIso: '2025-03-17', harvestDateIso: '2025-06-23'
   },
   {
-    id: 'mock-10', name: 'Kürbis', variety: 'Hokkaido', location: 'Acker Ost',
-    expectedYield: 400, unit: 'units', status: CropStatus.PLANNED,
-    plantWeek: 21, plantYear: 2024, harvestWeek: 42, harvestYear: 2024,
-    plantDateIso: '2024-05-20', harvestDateIso: '2024-10-14'
-  },
-  // NOVEMBRO / DEZEMBRO
-  {
-    id: 'mock-11', name: 'Grünkohl', variety: 'Winterbor', location: 'Feld 6',
-    expectedYield: 250, unit: 'kg', status: CropStatus.PLANNED,
-    plantWeek: 26, plantYear: 2024, harvestWeek: 46, harvestYear: 2024,
-    plantDateIso: '2024-06-24', harvestDateIso: '2024-11-11'
+    id: 'future-2025-2', name: 'Kürbis', variety: 'Butternut', location: 'Feld 5',
+    expectedYield: 350, unit: 'units', status: CropStatus.PLANNED,
+    plantWeek: 20, plantYear: 2025, harvestWeek: 40, harvestYear: 2025,
+    plantDateIso: '2025-05-12', harvestDateIso: '2025-09-29'
   },
   {
-    id: 'mock-12', name: 'Rosenkohl', variety: 'Groninger', location: 'Feld 6',
-    expectedYield: 180, unit: 'kg', status: CropStatus.PLANNED,
-    plantWeek: 18, plantYear: 2024, harvestWeek: 50, harvestYear: 2024,
-    plantDateIso: '2024-04-29', harvestDateIso: '2024-12-09'
+    id: 'future-2025-3', name: 'Grünkohl', variety: 'Lerchenzunge', location: 'Beet 8',
+    expectedYield: 150, unit: 'kg', status: CropStatus.PLANNED,
+    plantWeek: 25, plantYear: 2025, harvestWeek: 48, harvestYear: 2025,
+    plantDateIso: '2025-06-16', harvestDateIso: '2025-11-24'
   },
-  // EXTRAS PARA ENCHER GRÁFICO
+
+  // --- FUTURO 2026 ---
   {
-    id: 'mock-13', name: 'Salat', variety: 'Lollo Rosso', location: 'Beet 1',
-    expectedYield: 50, unit: 'units', status: CropStatus.HARVESTED,
-    plantWeek: 12, plantYear: 2024, harvestWeek: 20, harvestYear: 2024, // Maio
-    plantDateIso: '2024-03-18', harvestDateIso: '2024-05-13', actualYield: 50, harvestedAt: '2024-05-14'
-  },
-   {
-    id: 'mock-14', name: 'Gurken', variety: 'Marketmore', location: 'Gewächshaus A',
-    expectedYield: 200, unit: 'kg', status: CropStatus.HARVESTED,
-    plantWeek: 18, plantYear: 2024, harvestWeek: 28, harvestYear: 2024, // Julho
-    plantDateIso: '2024-04-29', harvestDateIso: '2024-07-08', actualYield: 180, harvestedAt: '2024-07-10'
+    id: 'future-2026-1', name: 'Spargel', variety: 'Gijnlim', location: 'Spargelfeld',
+    expectedYield: 500, unit: 'kg', status: CropStatus.PLANNED,
+    plantWeek: 15, plantYear: 2026, harvestWeek: 18, harvestYear: 2026,
+    plantDateIso: '2026-04-06', harvestDateIso: '2026-04-27'
   }
 ];
 

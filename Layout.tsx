@@ -89,10 +89,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-slate-400 text-sm flex flex-col items-center gap-1">
-            <p>{t('developedBy')} <span className="font-semibold text-slate-600">Breno Bezerra</span></p>
-            <a href="mailto:bqbreno@gmail.com" className="hover:text-green-700 transition-colors font-medium">bqbreno@gmail.com</a>
+      <footer className="bg-green-100 border-t border-green-200 py-6 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm flex flex-col items-center gap-1">
+            <p>{t('developedBy')} <span className="font-semibold text-slate-700">Breno Bezerra</span></p>
+            <a href="mailto:bqbreno@gmail.com" className="hover:text-green-700 transition-colors font-medium text-slate-600">bqbreno@gmail.com</a>
         </div>
       </footer>
     </div>
