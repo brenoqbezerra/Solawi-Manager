@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from '../i18n';
 import { Language } from '../types';
-import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp } from 'lucide-react';
+import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp, Wind } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -148,67 +148,108 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                         
                         <div className="p-4 md:p-6 bg-slate-50 space-y-4 md:space-y-6">
                             
-                            {/* Simulated Weather Widget */}
-                            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 md:p-6 text-white shadow-md flex flex-col md:flex-row justify-between items-end gap-4">
-                                <div>
-                                    <div className="flex items-center gap-1.5 mb-1 opacity-90 text-sm">
-                                        <MapPin size={14} /> Wandelgrund
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-4xl font-bold">22°</span>
-                                        <div className="bg-white/10 p-2 rounded-lg">
-                                            <Sun className="text-yellow-400 w-6 h-6" />
+                            {/* Simulated Weather Widget - Replicates Real System */}
+                            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 md:p-6 text-white shadow-md flex flex-col md:flex-row justify-between items-end gap-4 relative overflow-hidden">
+                                {/* Left Side: Current */}
+                                <div className="flex flex-row md:flex-col justify-between items-center md:items-start w-full md:w-auto z-10">
+                                    <div>
+                                        <div className="flex items-center gap-1.5 mb-1 opacity-90 text-sm">
+                                            <MapPin size={14} /> Berlin
                                         </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-4xl md:text-6xl font-bold tracking-tighter">18°</span>
+                                            <div className="bg-white/10 p-2 rounded-xl backdrop-blur-md border border-white/10">
+                                                <Sun className="text-yellow-400 w-8 h-8 md:w-10 md:h-10" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-xs md:text-sm text-blue-100 bg-white/10 px-2 py-1 rounded-lg mt-0 md:mt-2">
+                                        <Wind className="w-3.5 h-3.5" />
+                                        <span>12 km/h</span>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 text-xs overflow-hidden">
-                                    {[
-                                        { d: 'Heute', t: '22°', i: Sun, c: 'text-yellow-400' },
-                                        { d: 'Mo', t: '20°', i: Cloud, c: 'text-white' },
-                                        { d: 'Di', t: '18°', i: CloudRain, c: 'text-blue-300' }
-                                    ].map((day, idx) => (
-                                        <div key={idx} className={`flex flex-col items-center p-2 rounded-lg w-14 ${idx === 0 ? 'bg-white/20 border border-yellow-400/50' : 'bg-white/10'}`}>
-                                            <span className="opacity-80">{day.d}</span>
-                                            <day.i size={16} className={`my-1 ${day.c}`} />
-                                            <span className="font-bold">{day.t}</span>
-                                        </div>
-                                    ))}
+                                
+                                {/* Right Side: Forecast (Scrollable on Mobile) */}
+                                <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide z-10">
+                                    <div className="flex gap-2 min-w-max">
+                                        {[
+                                            { d: t('today'), tH: '18°', tL: '10°', i: Sun, c: 'text-yellow-400', today: true },
+                                            { d: 'Mo', tH: '20°', tL: '12°', i: Cloud, c: 'text-blue-100', today: false },
+                                            { d: 'Di', tH: '19°', tL: '11°', i: CloudRain, c: 'text-blue-300', today: false },
+                                            { d: 'Mi', tH: '22°', tL: '14°', i: Sun, c: 'text-yellow-400', today: false },
+                                            { d: 'Do', tH: '21°', tL: '13°', i: Cloud, c: 'text-slate-300', today: false }
+                                        ].map((day, idx) => (
+                                            <div key={idx} className={`flex flex-col items-center justify-between bg-white/10 border ${day.today ? 'border-yellow-400/50 bg-white/20' : 'border-white/5'} rounded-lg p-2 backdrop-blur-sm h-32 w-16 md:w-20 flex-shrink-0`}>
+                                                <span className="text-[10px] md:text-xs font-semibold uppercase opacity-90">{day.d}</span>
+                                                <day.i size={24} className={`my-1 ${day.c}`} />
+                                                <div className="flex flex-col items-center w-full gap-0.5">
+                                                    <span className="text-xs md:text-sm font-bold">{day.tH}</span>
+                                                    <div className="w-full h-[1px] bg-white/20 my-0.5 block"></div>
+                                                    <span className="text-[10px] opacity-75">{day.tL}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
-                             {/* Simulated Chart (Simplified) */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-4 h-32 md:h-40 flex flex-col justify-between">
-                                <div className="flex justify-between items-center">
-                                     <h3 className="text-sm font-bold text-slate-700 flex items-center gap-2"><TrendingUp size={16}/> Geplant vs Realisiert</h3>
-                                     <div className="bg-slate-50 border px-2 py-0.5 rounded text-xs text-slate-500">2024</div>
+                             {/* Simulated Chart (Planned vs Realized) */}
+                            <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6" style={{ minHeight: '300px' }}>
+                                <div className="flex justify-between items-center mb-6">
+                                     <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                                        <TrendingUp size={18} className="text-slate-400"/>
+                                        {t('chartTitle')}
+                                     </h3>
+                                     <div className="bg-slate-50 border px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 flex items-center gap-2">
+                                        <Calendar size={14} className="text-slate-400"/> 2024
+                                     </div>
                                 </div>
-                                <div className="flex items-end justify-between gap-1 h-20 md:h-24 px-2">
-                                    {[40, 60, 30, 80, 50, 70, 90, 60, 40, 20, 10, 5].map((h, i) => (
-                                        <div key={i} className="w-full bg-blue-100 rounded-t-sm relative group">
-                                            <div className="absolute bottom-0 w-full bg-blue-300 transition-all duration-500" style={{ height: `${h}%` }}></div>
-                                            <div className="absolute bottom-0 w-full border-t-2 border-green-600" style={{ height: `${h - 10}%` }}></div>
+                                <div className="relative h-48 w-full flex items-end justify-between gap-2 md:gap-4 px-2">
+                                    {/* Grid Lines */}
+                                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
+                                        <div className="border-t border-slate-200 w-full h-full"></div>
+                                        <div className="border-t border-slate-200 w-full h-full"></div>
+                                        <div className="border-t border-slate-200 w-full h-full"></div>
+                                    </div>
+
+                                    {[
+                                        { p: 40, r: 42 }, { p: 60, r: 58 }, { p: 30, r: 35 }, 
+                                        { p: 80, r: 75 }, { p: 50, r: 50 }, { p: 70, r: 65 }, 
+                                        { p: 90, r: 85 }, { p: 60, r: 62 }, { p: 40, r: 38 }, 
+                                        { p: 20, r: 25 }, { p: 10, r: 12 }, { p: 5, r: 5 }
+                                    ].map((val, i) => (
+                                        <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
+                                            {/* Bar (Planned) */}
+                                            <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80" style={{ height: `${val.p}%` }}></div>
+                                            
+                                            {/* Line Point (Realized) - Simulated */}
+                                            <div className="absolute w-2 h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-10" style={{ bottom: `${val.r}%` }}></div>
                                         </div>
                                     ))}
+                                </div>
+                                {/* X Axis Labels */}
+                                <div className="flex justify-between mt-2 text-[10px] text-slate-400 uppercase font-bold px-2">
+                                    <span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
                                 </div>
                             </div>
 
                             {/* KPI Row */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                                <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200/60 flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-green-600 uppercase text-center">Aktiv Gesamt</span>
-                                    <span className="text-xl md:text-2xl font-bold text-green-700">12</span>
+                                <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200/60 flex flex-col items-center justify-center gap-1 h-32">
+                                    <span className="text-[10px] font-bold text-green-600 uppercase text-center">{t('inProgress')}</span>
+                                    <span className="text-3xl font-bold text-green-700">12</span>
                                 </div>
-                                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200/60 flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-amber-600 uppercase text-center">Ernte Woche</span>
-                                    <span className="text-xl md:text-2xl font-bold text-amber-700">3</span>
+                                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200/60 flex flex-col items-center justify-center gap-1 h-32">
+                                    <span className="text-[10px] font-bold text-amber-600 uppercase text-center">{t('harvestThisWeek')}</span>
+                                    <span className="text-3xl font-bold text-amber-700">3</span>
                                 </div>
-                                <div className="bg-red-50 p-3 md:p-4 rounded-xl border border-red-200/60 flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-red-600 uppercase text-center">Überfällig</span>
-                                    <span className="text-xl md:text-2xl font-bold text-red-700">1</span>
+                                <div className="bg-red-50 p-3 md:p-4 rounded-xl border border-red-200/60 flex flex-col items-center justify-center gap-1 h-32">
+                                    <span className="text-[10px] font-bold text-red-600 uppercase text-center">{t('harvestOverdue')}</span>
+                                    <span className="text-3xl font-bold text-red-700">1</span>
                                 </div>
-                                <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200/60 flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-blue-600 uppercase text-center">Geerntet</span>
-                                    <span className="text-xl md:text-2xl font-bold text-blue-700">45</span>
+                                <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200/60 flex flex-col items-center justify-center gap-1 h-32">
+                                    <span className="text-[10px] font-bold text-blue-600 uppercase text-center">{t('harvested')}</span>
+                                    <span className="text-3xl font-bold text-blue-700">45</span>
                                 </div>
                             </div>
 
@@ -216,28 +257,30 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm text-left">
-                                        <thead className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase font-bold">
+                                        <thead className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase font-bold text-center">
                                             <tr>
-                                                <th className="px-4 md:px-6 py-3">Kultur</th>
-                                                <th className="px-4 md:px-6 py-3 text-center">Status</th>
-                                                <th className="px-4 md:px-6 py-3 text-center hidden md:table-cell">Ort</th>
-                                                <th className="px-4 md:px-6 py-3 text-center">Erntewoche</th>
-                                                <th className="px-4 md:px-6 py-3 text-center">Aktionen</th>
+                                                <th className="px-4 py-3 text-left">{t('culture')}</th>
+                                                <th className="px-4 py-3">{t('status')}</th>
+                                                <th className="px-4 py-3 hidden md:table-cell">{t('location')}</th>
+                                                <th className="px-4 py-3">{t('harvestWeek')}</th>
+                                                <th className="px-4 py-3">{t('actions')}</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
                                             {/* Row 1: Active */}
                                             <tr className="hover:bg-slate-50/50">
-                                                <td className="px-4 md:px-6 py-3">
-                                                    <div className="font-semibold text-slate-800">Kürbis</div>
-                                                    <div className="text-xs text-slate-500">Hokkaido</div>
+                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
+                                                    <div className="font-semibold text-slate-800 text-left">Kürbis</div>
+                                                    <div className="text-xs text-slate-500 text-left">Hokkaido</div>
                                                 </td>
-                                                <td className="px-4 md:px-6 py-3 text-center">
-                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">AKTIV</span>
+                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200 ring-1 ring-green-500/20 whitespace-normal min-w-[90px] inline-block">{t('growing')}</span>
                                                 </td>
-                                                <td className="px-4 md:px-6 py-3 text-center hidden md:table-cell text-slate-500">Feld 2</td>
-                                                <td className="px-4 md:px-6 py-3 text-center font-mono text-slate-600">KW 42</td>
-                                                <td className="px-4 md:px-6 py-3 text-center">
+                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">Feld 2</td>
+                                                <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
+                                                    KW 42 <span className="text-xs text-slate-400 block font-sans">150 kg</span>
+                                                </td>
+                                                <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">
                                                         <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
                                                         <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
@@ -245,17 +288,19 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                                 </td>
                                             </tr>
                                             {/* Row 2: Warning */}
-                                            <tr className="bg-amber-50/50">
-                                                <td className="px-4 md:px-6 py-3">
-                                                    <div className="font-semibold text-slate-800">Salat</div>
-                                                    <div className="text-xs text-slate-500">Lollo Rosso</div>
+                                            <tr className="bg-amber-50 hover:bg-amber-100">
+                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
+                                                    <div className="font-semibold text-slate-800 text-left">Salat</div>
+                                                    <div className="text-xs text-slate-500 text-left">Lollo Rosso</div>
                                                 </td>
-                                                <td className="px-4 md:px-6 py-3 text-center">
-                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">WOCHE</span>
+                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 ring-1 ring-amber-500/20 whitespace-normal min-w-[90px] inline-block">{t('harvestDue')}</span>
                                                 </td>
-                                                <td className="px-4 md:px-6 py-3 text-center hidden md:table-cell text-slate-500">Tunnel 1</td>
-                                                <td className="px-4 md:px-6 py-3 text-center font-mono text-slate-600">KW 38</td>
-                                                <td className="px-4 md:px-6 py-3 text-center">
+                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">Tunnel 1</td>
+                                                <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
+                                                    KW 38 <span className="text-xs text-slate-400 block font-sans">80 Stück</span>
+                                                </td>
+                                                <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">
                                                         <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
                                                         <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
