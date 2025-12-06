@@ -6,7 +6,7 @@ import WeatherWidget from './WeatherWidget';
 import CropForm from './CropForm';
 import { useTranslation } from '../i18n';
 import { 
-  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Calendar, TrendingUp, ChevronDown
+  Plus, Tractor, Trash2, Search, RotateCcw, X, Check, Calendar, TrendingUp, ChevronDown, Pencil
 } from 'lucide-react';
 import { 
   ComposedChart, Line, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid 
@@ -21,6 +21,7 @@ const Dashboard: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingCrop, setEditingCrop] = useState<Crop | null>(null);
   const [filter, setFilter] = useState('');
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   
   // Chart Year Filter State
   const currentYear = getYear();
@@ -68,6 +69,7 @@ const Dashboard: React.FC = () => {
     setCrops(updated);
     setShowForm(false);
     setEditingCrop(null);
+    setSelectedRowId(null);
   };
 
   const handleEdit = (crop: Crop, e: React.MouseEvent) => {
@@ -76,12 +78,17 @@ const Dashboard: React.FC = () => {
       setShowForm(true);
   };
 
+  const handleRowClick = (id: string) => {
+      setSelectedRowId(id === selectedRowId ? null : id);
+  };
+
   const handleDelete = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if(window.confirm(t('deleteConfirm'))) {
       const updated = storageService.deleteCrop(id);
       setCrops(updated);
+      if (selectedRowId === id) setSelectedRowId(null);
     }
   };
 
@@ -231,25 +238,25 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
              
              {/* 1. Active Total */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 w-full p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${totalActiveCount > 0 ? 'text-green-600' : 'text-slate-400'}`}>{t('inProgress')}</span>
                 <span className={`text-3xl font-bold ${totalActiveCount > 0 ? 'text-green-700' : 'text-slate-700'}`}>{totalActiveCount}</span>
              </div>
 
              {/* 2. Due This Week */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 w-full p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${dueThisWeekCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>{t('harvestThisWeek')}</span>
                 <span className={`text-3xl font-bold ${dueThisWeekCount > 0 ? 'text-amber-700' : 'text-slate-700'}`}>{dueThisWeekCount}</span>
              </div>
              
              {/* 3. Overdue */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 w-full p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${overdueCount > 0 ? 'text-red-600' : 'text-slate-400'}`}>{t('harvestOverdue')}</span>
                 <span className={`text-3xl font-bold ${overdueCount > 0 ? 'text-red-600' : 'text-slate-700'}`}>{overdueCount}</span>
              </div>
              
              {/* 4. Harvested */}
-             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 w-full p-4 rounded-xl border shadow-sm flex flex-col justify-center items-center text-center gap-2 ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
                  <span className={`text-xs font-bold uppercase tracking-wider ${harvestedCount > 0 ? 'text-blue-600' : 'text-slate-400'}`}>{t('harvested')}</span>
                  <span className={`text-3xl font-bold ${harvestedCount > 0 ? 'text-blue-700' : 'text-slate-700'}`}>
                      {harvestedCount}
@@ -310,7 +317,7 @@ const Dashboard: React.FC = () => {
             {/* Chart Container */}
             <div className="w-full h-48 md:h-64" style={{ minHeight: '192px' }}>
                 {isMounted ? (
-                    <ResponsiveContainer width="100%" height="100%" debounce={100}>
+                    <ResponsiveContainer width="100%" height="100%" debounce={50}>
                         <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                             <XAxis dataKey="name" tick={{fontSize: 10, fill: '#94a3b8'}} tickLine={false} axisLine={false} interval={0} />
@@ -351,16 +358,16 @@ const Dashboard: React.FC = () => {
           {/* Table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left min-w-[1000px] border-collapse">
+              <table className="w-full min-w-[1000px] border-collapse">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('culture')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('plantMonth')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestMonth')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('culture')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('plantMonth')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestMonth')}</th>
                     <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('status')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('location')}</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestWeek')}</th>
-                    <th className="p-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('location')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestWeek')}</th>
+                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -376,7 +383,8 @@ const Dashboard: React.FC = () => {
                   )}
                   {filteredCrops.map(crop => {
                     const statusColor = getStatusColor(crop.plantWeek, crop.harvestWeek, crop.harvestYear, currentWeek, currentYear, crop.status);
-                    
+                    const isSelected = selectedRowId === crop.id;
+
                     const statusLabels: Record<string, string> = {
                        red: t('harvestOverdue'),
                        yellow: t('harvestDue'),
@@ -392,29 +400,32 @@ const Dashboard: React.FC = () => {
                       blue: 'bg-blue-50 text-blue-700 border-blue-200'
                     };
 
-                    // Row Highlight Logic
-                    let rowClasses = "transition-colors group cursor-pointer ";
-                    if (statusColor === 'red') {
-                        rowClasses += "bg-red-50 hover:bg-red-100 border-l-4 border-l-red-500";
+                    // Row Highlight Logic (Background only, no side border)
+                    let rowClasses = "transition-colors group cursor-pointer border-b border-slate-50 last:border-0 ";
+                    
+                    if (isSelected) {
+                        rowClasses += "bg-slate-100 ";
+                    } else if (statusColor === 'red') {
+                        rowClasses += "bg-red-50 hover:bg-red-100 ";
                     } else if (statusColor === 'yellow') {
-                        rowClasses += "bg-amber-50 hover:bg-amber-100 border-l-4 border-l-amber-500";
+                        rowClasses += "bg-amber-50 hover:bg-amber-100 ";
                     } else {
-                        rowClasses += "hover:bg-slate-50/80 border-l-4 border-l-transparent";
+                        rowClasses += "hover:bg-slate-50/80 ";
                     }
                     
                     const unitLabel = t(`unit_${crop.unit}` as any) || crop.unit;
 
                     return (
-                      <tr key={crop.id} className={rowClasses} onClick={(e) => handleEdit(crop, e)}>
-                        <td className="p-4 border-r border-slate-50/50">
+                      <tr key={crop.id} className={rowClasses} onClick={() => handleRowClick(crop.id)}>
+                        <td className="p-4 border-r border-slate-50/50 text-center">
                           <div className={`font-semibold ${crop.status === CropStatus.HARVESTED ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{crop.name}</div>
                           <div className="text-xs text-slate-500 font-medium">{crop.variety}</div>
-                          {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate">{crop.notes}</div>}
+                          {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate mx-auto">{crop.notes}</div>}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50">
+                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50 text-center">
                             {getMonthNameFromIso(crop.plantDateIso)}
                         </td>
-                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50">
+                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50 text-center">
                             {getMonthNameFromIso(crop.harvestDateIso)}
                         </td>
                         <td className="p-4 text-center border-r border-slate-50/50">
@@ -422,15 +433,15 @@ const Dashboard: React.FC = () => {
                             {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50/50">
+                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50/50 text-center">
                           {crop.location}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50/50">
+                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50/50 text-center">
                           KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>
-                        <td className="p-4 text-right">
-                          <div className="flex justify-end gap-2">
+                        <td className="p-4 text-center">
+                          <div className="flex justify-center gap-2">
                              {/* Harvest Button */}
                             {crop.status !== CropStatus.HARVESTED && (
                                 <button 
@@ -441,6 +452,16 @@ const Dashboard: React.FC = () => {
                                     <Tractor size={18} />
                                 </button>
                             )}
+                            
+                            {/* Edit Button (New) */}
+                             <button 
+                              className="p-2 text-blue-600 bg-white/50 hover:bg-blue-100 rounded-lg transition-all border border-blue-200"
+                              title={t('edit')}
+                              onClick={(e) => handleEdit(crop, e)}
+                            >
+                              <Pencil size={18} />
+                            </button>
+
                             {/* Delete Button */}
                             <button 
                               className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-100/50 rounded-lg transition-all"
@@ -500,24 +521,24 @@ const Dashboard: React.FC = () => {
                     </button>
                 </div>
                 <div className="p-6">
-                    <p className="text-slate-600 mb-6 font-medium">
+                    <p className="text-slate-600 mb-6 font-medium text-center">
                         {harvestModalCrop.name}
                     </p>
                     
                     <div className="mb-6 relative">
-                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 text-center">
                             {t('quantity')} ({t(`unit_${harvestModalCrop.unit}` as any) || harvestModalCrop.unit})
                         </label>
                         <input 
                             type="number" 
-                            className="w-full text-4xl font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 bg-transparent"
+                            className="w-full text-4xl font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 bg-transparent text-center"
                             autoFocus
                             placeholder="0"
                             style={{ backgroundColor: '#ffffff', color: '#1e293b' }}
                             value={harvestAmount}
                             onChange={(e) => setHarvestAmount(e.target.value)}
                         />
-                        <div className="mt-2 text-xs text-slate-400">
+                        <div className="mt-2 text-xs text-slate-400 text-center">
                              {t('remainingAmount')}: <strong>{harvestModalCrop.expectedYield}</strong>
                         </div>
                     </div>
