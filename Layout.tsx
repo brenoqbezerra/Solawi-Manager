@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from './i18n';
 import { Language } from './types';
-import { Sprout, ChevronDown } from 'lucide-react';
+import { Sprout, ChevronDown, Home } from 'lucide-react';
 
 interface Props {
   children: React.ReactNode;
+  onGoHome?: () => void;
 }
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<Props> = ({ children, onGoHome }) => {
   const { lang, setLang, t } = useTranslation();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -45,7 +46,19 @@ const Layout: React.FC<Props> = ({ children }) => {
              <span className="font-bold text-lg md:text-xl tracking-tight text-white truncate">Solawi<span className="text-green-200">Manager</span></span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            
+            {onGoHome && (
+              <button
+                onClick={onGoHome}
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg px-3 py-1.5 backdrop-blur-sm transition-all duration-200"
+                title={t('backToLanding')}
+              >
+                <Home size={18} className="text-white" />
+                <span className="hidden md:inline text-sm font-medium text-white">{t('backToLanding')}</span>
+              </button>
+            )}
+
             {/* Custom Language Dropdown */}
             <div className="relative" ref={dropdownRef}>
                 <button 

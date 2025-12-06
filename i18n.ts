@@ -76,6 +76,7 @@ const translations = {
     plantMonth: "Pflanzmonat",
     harvestMonth: "Erntemonat",
     developedBy: "Entwickelt von",
+    backToLanding: "Startseite",
 
     // Landing Page Keys
     lp_hero_title: "Einfache Anbauplanung für Solidarische Landwirtschaft",
@@ -169,6 +170,7 @@ const translations = {
     plantMonth: "Plant Month",
     harvestMonth: "Harvest Month",
     developedBy: "Developed by",
+    backToLanding: "Home Page",
 
     // Landing Page Keys
     lp_hero_title: "Simple Crop Planning for Community Supported Agriculture",
@@ -262,6 +264,7 @@ const translations = {
     plantMonth: "Mes Siembra",
     harvestMonth: "Mes Cosecha",
     developedBy: "Desarrollado por",
+    backToLanding: "Inicio",
 
     // Landing Page Keys
     lp_hero_title: "Planificación de Cultivos Simple para Agricultura Solidaria",
@@ -271,7 +274,7 @@ const translations = {
     lp_story_title: "Concebido a partir de la observación, curiosidad y el deseo de ayudar",
     lp_story_wandel: "En las afueras de Dresde, entre campos de centeno, rebaños de ovejas y el bosque de pollos de Wandelgrund, surgió la pregunta: ¿Cómo puede la tecnología simplificar el trabajo en la granja, sin eclipsarlo?",
     lp_story_wirgarten: "Durante la investigación, encontré la inteligente planificación analógica de WirGarten — una plantilla que quería digitalizar para hacerla más accesible y multilingüe.",
-    lp_story_mvp: "Un MVP — conscientemente simple, almacenado localmente, sin inicio de sesión. No es perfecto, pero es útil. Y listo para crecer con tu ayuda.",
+    lp_story_mvp: "Un MVP — conscientemente simples, almacenado localmente, sin inicio de sesión. No es perfecto, pero es útil. Y listo para crecer con tu ayuda.",
     lp_global_reach: "Disponible en alemán, inglés, español, francés y portugués — porque las buenas ideas para la agricultura solidaria no conocen fronteras.",
     lp_feat_dashboard: "Panel con vista en tiempo real (Cultivos activos, Cosechas planificadas)",
     lp_feat_kw: "Planificación basada en semanas (KW) con transición de año",
@@ -355,6 +358,7 @@ const translations = {
     plantMonth: "Mois Plantation",
     harvestMonth: "Mois Récolte",
     developedBy: "Développé par",
+    backToLanding: "Accueil",
 
     // Landing Page Keys
     lp_hero_title: "Planification des Cultures Simple pour l'Agriculture Solidaire",
@@ -448,6 +452,7 @@ const translations = {
     plantMonth: "Mês Plantio",
     harvestMonth: "Mês Colheita",
     developedBy: "Desenvolvido por",
+    backToLanding: "Página Inicial",
 
     // Landing Page Keys
     lp_hero_title: "Planejamento de Cultivo Simples para Agricultura Solidária",

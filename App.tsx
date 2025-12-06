@@ -11,7 +11,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <Layout>
+    <Layout onGoHome={() => setView('landing')}>
       <Dashboard />
     </Layout>
   );
