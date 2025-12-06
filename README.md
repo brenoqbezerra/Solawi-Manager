@@ -36,7 +36,7 @@ O objetivo é resolver a dor de pequenos agricultores que perdem tempo com plani
 
 ### 📸 Preview
 
-![image alt]([https://github.com/brenoqbezerra/solawi-manager/blob/13413c15bc42d7aa66d1d1733c27dbb7d8cb9ac6/screenshot.png](https://github.com/brenoqbezerra/Solawi-Manager/blob/main/Banner_Solawi_Manager_Github.png?raw=true))
+![image alt]([https://github.com/brenoqbezerra/solawi-manager/blob/13413c15bc42d7aa66d1d1733c27dbb7d8cb9ac6/screenshot.png](https://github.com/brenoqbezerra/Solawi-Manager/blob/main/Banner_Solawi_Manager_Github.png?raw=true)
 
 ### 🌟 "Concebido a partir da observação e curiosidade"
 
