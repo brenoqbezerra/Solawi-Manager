@@ -71,14 +71,14 @@ const WeatherWidget: React.FC<Props> = ({ geo }) => {
                 const isToday = i === 0;
                 
                 return (
-                <div key={i} className={`flex flex-col items-center justify-between bg-white/10 border ${isToday ? 'border-yellow-400/50 bg-white/20' : 'border-white/5'} rounded-lg p-1.5 backdrop-blur-sm h-20 w-[4.5rem] md:h-32 flex-shrink-0 transition-all`}>
+                <div key={i} className={`flex flex-col items-center justify-between bg-white/10 border ${isToday ? 'border-yellow-400/50 bg-white/20' : 'border-white/5'} rounded-lg p-2 backdrop-blur-sm h-32 w-20 md:h-32 flex-shrink-0 transition-all`}>
                     <span className="text-[10px] md:text-xs font-semibold uppercase opacity-90">{isToday ? t('today') : dayName}</span>
-                    <div className="my-0.5 md:my-1 transform scale-75 md:scale-90">
+                    <div className="my-1 transform scale-90">
                         {getWeatherIcon(weather.dailyForecast.weatherCode[i], "w-8 h-8")}
                     </div>
                     <div className="flex flex-col items-center w-full gap-0 md:gap-0.5">
                         <span className="text-xs md:text-sm font-bold">{Math.round(weather.dailyForecast.temperatureMax[i])}°</span>
-                        <div className="w-full h-[1px] bg-white/20 my-0.5 hidden md:block"></div>
+                        <div className="w-full h-[1px] bg-white/20 my-0.5 block"></div>
                         <span className="text-[10px] md:text-xs opacity-75">{Math.round(weather.dailyForecast.temperatureMin[i])}°</span>
                     </div>
                 </div>

@@ -201,30 +201,31 @@ const Dashboard: React.FC = () => {
         </div>
         
         {/* Quick Stats Cards - 4 Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
+        {/* Force h-32 (128px) height on all cards for consistency across devices */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
              
              {/* 1. Active Total */}
-             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${totalActiveCount > 0 ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${totalActiveCount > 0 ? 'text-green-600' : 'text-slate-400'}`}>{t('inProgress')}</span>
-                <span className={`text-2xl font-bold mt-2 ${totalActiveCount > 0 ? 'text-green-700' : 'text-slate-700'}`}>{totalActiveCount}</span>
+                <span className={`text-3xl font-bold ${totalActiveCount > 0 ? 'text-green-700' : 'text-slate-700'}`}>{totalActiveCount}</span>
              </div>
 
              {/* 2. Due This Week */}
-             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${dueThisWeekCount > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${dueThisWeekCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>{t('harvestThisWeek')}</span>
-                <span className={`text-2xl font-bold mt-2 ${dueThisWeekCount > 0 ? 'text-amber-700' : 'text-slate-700'}`}>{dueThisWeekCount}</span>
+                <span className={`text-3xl font-bold ${dueThisWeekCount > 0 ? 'text-amber-700' : 'text-slate-700'}`}>{dueThisWeekCount}</span>
              </div>
              
              {/* 3. Overdue */}
-             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${overdueCount > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${overdueCount > 0 ? 'text-red-600' : 'text-slate-400'}`}>{t('harvestOverdue')}</span>
-                <span className={`text-2xl font-bold mt-2 ${overdueCount > 0 ? 'text-red-600' : 'text-slate-700'}`}>{overdueCount}</span>
+                <span className={`text-3xl font-bold ${overdueCount > 0 ? 'text-red-600' : 'text-slate-700'}`}>{overdueCount}</span>
              </div>
              
              {/* 4. Harvested */}
-             <div className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between min-w-[110px] ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
+             <div className={`h-32 p-4 rounded-xl border shadow-sm flex flex-col justify-between ${harvestedCount > 0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'}`}>
                  <span className={`text-xs font-bold uppercase tracking-wider ${harvestedCount > 0 ? 'text-blue-600' : 'text-slate-400'}`}>{t('harvested')}</span>
-                 <span className={`text-2xl font-bold mt-2 ${harvestedCount > 0 ? 'text-blue-700' : 'text-slate-700'}`}>
+                 <span className={`text-3xl font-bold ${harvestedCount > 0 ? 'text-blue-700' : 'text-slate-700'}`}>
                      {harvestedCount}
                  </span>
              </div>
@@ -237,7 +238,7 @@ const Dashboard: React.FC = () => {
         <WeatherWidget geo={geo} />
         
         {/* Chart */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm" style={{ minHeight: '300px' }}>
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-slate-800 flex items-center gap-2">
                     <TrendingUp size={18} className="text-slate-400"/>
@@ -324,13 +325,14 @@ const Dashboard: React.FC = () => {
           {/* Table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              {/* min-w-[800px] ensures horizontal scrolling triggers on mobile */}
+              <table className="w-full text-left min-w-[800px]">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
                     <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('culture')}</th>
                     <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{t('status')}</th>
-                    <th className="p-4 hidden sm:table-cell text-xs font-bold text-slate-500 uppercase tracking-wider">{t('location')}</th>
-                    <th className="p-4 hidden md:table-cell text-xs font-bold text-slate-500 uppercase tracking-wider">{t('harvestWeek')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('location')}</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t('harvestWeek')}</th>
                     <th className="p-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
                   </tr>
                 </thead>
@@ -377,10 +379,10 @@ const Dashboard: React.FC = () => {
                             {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
-                        <td className="p-4 hidden sm:table-cell text-sm text-slate-600 font-medium">
+                        <td className="p-4 text-sm text-slate-600 font-medium">
                           {crop.location}
                         </td>
-                        <td className="p-4 hidden md:table-cell text-sm text-slate-600 font-mono">
+                        <td className="p-4 text-sm text-slate-600 font-mono">
                           KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>
