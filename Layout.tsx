@@ -104,10 +104,10 @@ const Layout: React.FC<Props> = ({ children, onGoHome }) => {
         {children}
       </main>
 
-      {/* Footer */}
+      {/* Footer - Left aligned on mobile to avoid FAB overlap */}
       <footer className="bg-green-100 border-t border-green-200 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm flex flex-col items-center gap-1">
-            <p>{t('developedBy')} <span className="font-semibold text-slate-700">Breno Bezerra</span></p>
+        <div className="max-w-7xl mx-auto px-4 md:px-8 text-left md:text-center text-slate-500 text-sm flex flex-col items-start md:items-center gap-1">
+            <p>{t('developedBy')} <a href="https://www.linkedin.com/in/brenoqbezerra/" target="_blank" rel="noreferrer" className="font-semibold text-slate-700 hover:text-green-700 underline">Breno Bezerra</a></p>
             <a href="mailto:bqbreno@gmail.com" className="hover:text-green-700 transition-colors font-medium text-slate-600">bqbreno@gmail.com</a>
         </div>
       </footer>

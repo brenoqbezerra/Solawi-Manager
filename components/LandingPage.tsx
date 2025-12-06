@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from '../i18n';
 import { Language } from '../types';
-import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2 } from 'lucide-react';
+import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -119,7 +119,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                         {t('lp_cta_start')}
                     </button>
                     <a 
-                        href="https://github.com/bqbreno/solawi-manager-v2" 
+                        href="https://github.com/brenoqbezerra/Solawi-Manager" 
                         target="_blank" 
                         rel="noreferrer"
                         className="bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg py-4 px-8 rounded-xl border border-slate-200 shadow-sm transition-colors flex items-center justify-center gap-2"
@@ -130,9 +130,9 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
 
                 {/* Simulated Dashboard UI - Realistic Preview */}
                 <div className="relative w-full max-w-5xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden text-left">
+                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden text-left transform md:rotate-1 hover:rotate-0 transition-transform duration-500">
                         {/* Fake Header */}
-                        <div className="h-14 bg-gradient-to-r from-green-800 to-green-700 flex items-center px-6 justify-between">
+                        <div className="h-14 bg-gradient-to-r from-green-800 to-green-700 flex items-center px-4 md:px-6 justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="bg-white/10 p-1.5 rounded-lg">
                                     <Sprout size={20} className="text-green-100" />
@@ -140,28 +140,75 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                 <span className="text-white font-bold tracking-tight">Solawi<span className="text-green-200">Manager</span> <span className="text-xs font-normal border border-green-400/30 rounded px-1.5 py-0.5 bg-green-900/20 text-green-100">v2</span></span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-white/10"></div>
+                                <div className="hidden md:flex bg-white/10 px-3 py-1 rounded text-xs text-white items-center gap-2">
+                                    <span>🇩🇪 Deutsch</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div className="p-6 bg-slate-50 space-y-6">
+                        <div className="p-4 md:p-6 bg-slate-50 space-y-4 md:space-y-6">
+                            
+                            {/* Simulated Weather Widget */}
+                            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 md:p-6 text-white shadow-md flex flex-col md:flex-row justify-between items-end gap-4">
+                                <div>
+                                    <div className="flex items-center gap-1.5 mb-1 opacity-90 text-sm">
+                                        <MapPin size={14} /> Wandelgrund
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-4xl font-bold">22°</span>
+                                        <div className="bg-white/10 p-2 rounded-lg">
+                                            <Sun className="text-yellow-400 w-6 h-6" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 text-xs overflow-hidden">
+                                    {[
+                                        { d: 'Heute', t: '22°', i: Sun, c: 'text-yellow-400' },
+                                        { d: 'Mo', t: '20°', i: Cloud, c: 'text-white' },
+                                        { d: 'Di', t: '18°', i: CloudRain, c: 'text-blue-300' }
+                                    ].map((day, idx) => (
+                                        <div key={idx} className={`flex flex-col items-center p-2 rounded-lg w-14 ${idx === 0 ? 'bg-white/20 border border-yellow-400/50' : 'bg-white/10'}`}>
+                                            <span className="opacity-80">{day.d}</span>
+                                            <day.i size={16} className={`my-1 ${day.c}`} />
+                                            <span className="font-bold">{day.t}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                             {/* Simulated Chart (Simplified) */}
+                            <div className="bg-white rounded-xl border border-slate-200 p-4 h-32 md:h-40 flex flex-col justify-between">
+                                <div className="flex justify-between items-center">
+                                     <h3 className="text-sm font-bold text-slate-700 flex items-center gap-2"><TrendingUp size={16}/> Geplant vs Realisiert</h3>
+                                     <div className="bg-slate-50 border px-2 py-0.5 rounded text-xs text-slate-500">2024</div>
+                                </div>
+                                <div className="flex items-end justify-between gap-1 h-20 md:h-24 px-2">
+                                    {[40, 60, 30, 80, 50, 70, 90, 60, 40, 20, 10, 5].map((h, i) => (
+                                        <div key={i} className="w-full bg-blue-100 rounded-t-sm relative group">
+                                            <div className="absolute bottom-0 w-full bg-blue-300 transition-all duration-500" style={{ height: `${h}%` }}></div>
+                                            <div className="absolute bottom-0 w-full border-t-2 border-green-600" style={{ height: `${h - 10}%` }}></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                             {/* KPI Row */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="bg-green-50 p-4 rounded-xl border border-green-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-green-600 uppercase">Aktiv Gesamt</span>
-                                    <span className="text-2xl font-bold text-green-700">12</span>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                                <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200/60 flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-green-600 uppercase text-center">Aktiv Gesamt</span>
+                                    <span className="text-xl md:text-2xl font-bold text-green-700">12</span>
                                 </div>
-                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-amber-600 uppercase">Ernte diese Woche</span>
-                                    <span className="text-2xl font-bold text-amber-700">3</span>
+                                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200/60 flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-amber-600 uppercase text-center">Ernte Woche</span>
+                                    <span className="text-xl md:text-2xl font-bold text-amber-700">3</span>
                                 </div>
-                                <div className="bg-red-50 p-4 rounded-xl border border-red-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-red-600 uppercase">Überfällig</span>
-                                    <span className="text-2xl font-bold text-red-700">1</span>
+                                <div className="bg-red-50 p-3 md:p-4 rounded-xl border border-red-200/60 flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-red-600 uppercase text-center">Überfällig</span>
+                                    <span className="text-xl md:text-2xl font-bold text-red-700">1</span>
                                 </div>
-                                <div className="bg-blue-50 p-4 rounded-xl border border-blue-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold text-blue-600 uppercase">Geerntet</span>
-                                    <span className="text-2xl font-bold text-blue-700">45</span>
+                                <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200/60 flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-blue-600 uppercase text-center">Geerntet</span>
+                                    <span className="text-xl md:text-2xl font-bold text-blue-700">45</span>
                                 </div>
                             </div>
 
@@ -171,24 +218,26 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                     <table className="w-full text-sm text-left">
                                         <thead className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase font-bold">
                                             <tr>
-                                                <th className="px-6 py-3">Kultur</th>
-                                                <th className="px-6 py-3 text-center">Status</th>
-                                                <th className="px-6 py-3 text-center">Erntewoche</th>
-                                                <th className="px-6 py-3 text-center">Aktionen</th>
+                                                <th className="px-4 md:px-6 py-3">Kultur</th>
+                                                <th className="px-4 md:px-6 py-3 text-center">Status</th>
+                                                <th className="px-4 md:px-6 py-3 text-center hidden md:table-cell">Ort</th>
+                                                <th className="px-4 md:px-6 py-3 text-center">Erntewoche</th>
+                                                <th className="px-4 md:px-6 py-3 text-center">Aktionen</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
                                             {/* Row 1: Active */}
                                             <tr className="hover:bg-slate-50/50">
-                                                <td className="px-6 py-4">
+                                                <td className="px-4 md:px-6 py-3">
                                                     <div className="font-semibold text-slate-800">Kürbis</div>
                                                     <div className="text-xs text-slate-500">Hokkaido</div>
                                                 </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">AKTIV</span>
+                                                <td className="px-4 md:px-6 py-3 text-center">
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">AKTIV</span>
                                                 </td>
-                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 42</td>
-                                                <td className="px-6 py-4 text-center">
+                                                <td className="px-4 md:px-6 py-3 text-center hidden md:table-cell text-slate-500">Feld 2</td>
+                                                <td className="px-4 md:px-6 py-3 text-center font-mono text-slate-600">KW 42</td>
+                                                <td className="px-4 md:px-6 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">
                                                         <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
                                                         <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
@@ -197,33 +246,18 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                             </tr>
                                             {/* Row 2: Warning */}
                                             <tr className="bg-amber-50/50">
-                                                <td className="px-6 py-4">
+                                                <td className="px-4 md:px-6 py-3">
                                                     <div className="font-semibold text-slate-800">Salat</div>
                                                     <div className="text-xs text-slate-500">Lollo Rosso</div>
                                                 </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">DIESE WOCHE</span>
+                                                <td className="px-4 md:px-6 py-3 text-center">
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">WOCHE</span>
                                                 </td>
-                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 38</td>
-                                                <td className="px-6 py-4 text-center">
+                                                <td className="px-4 md:px-6 py-3 text-center hidden md:table-cell text-slate-500">Tunnel 1</td>
+                                                <td className="px-4 md:px-6 py-3 text-center font-mono text-slate-600">KW 38</td>
+                                                <td className="px-4 md:px-6 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">
                                                         <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
-                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {/* Row 3: Harvested */}
-                                            <tr className="opacity-60">
-                                                <td className="px-6 py-4">
-                                                    <div className="font-semibold text-slate-800 line-through">Tomaten</div>
-                                                    <div className="text-xs text-slate-500">Harzfeuer</div>
-                                                </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">GEERNTET</span>
-                                                </td>
-                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 30</td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <div className="flex justify-center gap-2 opacity-50">
                                                         <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
                                                     </div>
                                                 </td>
