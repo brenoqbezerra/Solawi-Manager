@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from '../i18n';
 import { Language } from '../types';
-import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart } from 'lucide-react';
+import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2 } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -119,7 +119,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                         {t('lp_cta_start')}
                     </button>
                     <a 
-                        href="https://github.com/bqbreno/solawi-manager-v2" // Placeholder link or real if available
+                        href="https://github.com/bqbreno/solawi-manager-v2" 
                         target="_blank" 
                         rel="noreferrer"
                         className="bg-white hover:bg-slate-50 text-slate-700 font-bold text-lg py-4 px-8 rounded-xl border border-slate-200 shadow-sm transition-colors flex items-center justify-center gap-2"
@@ -128,59 +128,108 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                     </a>
                 </div>
 
-                {/* Simulated Dashboard UI (CSS populated) - Replacing the "Blank" dashboard */}
-                <div className="relative w-full max-w-4xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
+                {/* Simulated Dashboard UI - Realistic Preview */}
+                <div className="relative w-full max-w-5xl mx-auto">
+                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden text-left">
                         {/* Fake Header */}
-                        <div className="h-12 bg-white border-b border-slate-100 flex items-center px-6 gap-4">
-                            <div className="w-20 h-4 bg-slate-100 rounded animate-pulse"></div>
-                            <div className="flex-1"></div>
-                            <div className="w-8 h-8 bg-green-100 rounded-full"></div>
+                        <div className="h-14 bg-gradient-to-r from-green-800 to-green-700 flex items-center px-6 justify-between">
+                            <div className="flex items-center gap-2">
+                                <div className="bg-white/10 p-1.5 rounded-lg">
+                                    <Sprout size={20} className="text-green-100" />
+                                </div>
+                                <span className="text-white font-bold tracking-tight">Solawi<span className="text-green-200">Manager</span> <span className="text-xs font-normal border border-green-400/30 rounded px-1.5 py-0.5 bg-green-900/20 text-green-100">v2</span></span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-white/10"></div>
+                            </div>
                         </div>
                         
-                        <div className="p-6 bg-slate-50/50 space-y-6">
+                        <div className="p-6 bg-slate-50 space-y-6">
                             {/* KPI Row */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold">12</div>
-                                    <div className="h-2 w-24 bg-slate-100 rounded"></div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="bg-green-50 p-4 rounded-xl border border-green-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-green-600 uppercase">Aktiv Gesamt</span>
+                                    <span className="text-2xl font-bold text-green-700">12</span>
                                 </div>
-                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 shadow-sm flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold">3</div>
-                                    <div className="h-2 w-24 bg-amber-200/50 rounded"></div>
+                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-amber-600 uppercase">Ernte diese Woche</span>
+                                    <span className="text-2xl font-bold text-amber-700">3</span>
                                 </div>
-                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">85</div>
-                                    <div className="h-2 w-24 bg-slate-100 rounded"></div>
+                                <div className="bg-red-50 p-4 rounded-xl border border-red-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-red-600 uppercase">Überfällig</span>
+                                    <span className="text-2xl font-bold text-red-700">1</span>
+                                </div>
+                                <div className="bg-blue-50 p-4 rounded-xl border border-blue-200/60 shadow-sm flex flex-col items-center justify-center gap-1">
+                                    <span className="text-[10px] font-bold text-blue-600 uppercase">Geerntet</span>
+                                    <span className="text-2xl font-bold text-blue-700">45</span>
                                 </div>
                             </div>
 
-                            {/* Main Content Area */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Simulated Chart */}
-                                <div className="col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm h-64 flex flex-col justify-end gap-2">
-                                     <div className="flex items-end justify-between gap-2 h-40">
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[40%]"></div>
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[60%]"></div>
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[30%]"></div>
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[80%]"></div>
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[50%]"></div>
-                                        <div className="w-full bg-blue-200 rounded-t-sm h-[90%]"></div>
-                                     </div>
-                                     <div className="w-full h-1 bg-slate-100 mt-2"></div>
-                                </div>
-                                
-                                {/* Simulated List */}
-                                <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
-                                    {[1, 2, 3, 4].map((i) => (
-                                        <div key={i} className="flex items-center gap-3 p-2 border-b border-slate-50 last:border-0">
-                                            <div className="w-8 h-8 bg-slate-100 rounded-full"></div>
-                                            <div className="flex-1 space-y-1">
-                                                <div className="h-2 w-20 bg-slate-100 rounded"></div>
-                                                <div className="h-2 w-12 bg-slate-50 rounded"></div>
-                                            </div>
-                                        </div>
-                                    ))}
+                            {/* Fake Table */}
+                            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm text-left">
+                                        <thead className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase font-bold">
+                                            <tr>
+                                                <th className="px-6 py-3">Kultur</th>
+                                                <th className="px-6 py-3 text-center">Status</th>
+                                                <th className="px-6 py-3 text-center">Erntewoche</th>
+                                                <th className="px-6 py-3 text-center">Aktionen</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-50">
+                                            {/* Row 1: Active */}
+                                            <tr className="hover:bg-slate-50/50">
+                                                <td className="px-6 py-4">
+                                                    <div className="font-semibold text-slate-800">Kürbis</div>
+                                                    <div className="text-xs text-slate-500">Hokkaido</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">AKTIV</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 42</td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <div className="flex justify-center gap-2 opacity-50">
+                                                        <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
+                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/* Row 2: Warning */}
+                                            <tr className="bg-amber-50/50">
+                                                <td className="px-6 py-4">
+                                                    <div className="font-semibold text-slate-800">Salat</div>
+                                                    <div className="text-xs text-slate-500">Lollo Rosso</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">DIESE WOCHE</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 38</td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <div className="flex justify-center gap-2 opacity-50">
+                                                        <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
+                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/* Row 3: Harvested */}
+                                            <tr className="opacity-60">
+                                                <td className="px-6 py-4">
+                                                    <div className="font-semibold text-slate-800 line-through">Tomaten</div>
+                                                    <div className="text-xs text-slate-500">Harzfeuer</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">GEERNTET</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-center font-mono text-slate-600">KW 30</td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <div className="flex justify-center gap-2 opacity-50">
+                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -263,8 +312,9 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
             <div className="text-center md:text-left">
                 <span className="font-bold text-slate-900">Solawi<span className="text-green-600">Manager</span></span>
                 <p className="text-sm text-slate-500 mt-1">
-                    {t('developedBy')} <a href="mailto:bqbreno@gmail.com" className="hover:text-green-700 underline">Breno Bezerra</a>
+                    {t('developedBy')} <a href="https://www.linkedin.com/in/brenoqbezerra/" target="_blank" rel="noreferrer" className="hover:text-green-700 underline font-medium">Breno Bezerra</a>
                 </p>
+                <a href="mailto:bqbreno@gmail.com" className="text-xs text-slate-400 hover:text-green-600 mt-0.5 block">bqbreno@gmail.com</a>
             </div>
             
             <div className="flex flex-col md:flex-row items-center gap-6 text-sm text-slate-500">

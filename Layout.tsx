@@ -43,7 +43,10 @@ const Layout: React.FC<Props> = ({ children, onGoHome }) => {
              <div className="bg-white/10 p-1.5 md:p-2 rounded-lg backdrop-blur-sm border border-white/10">
                <Sprout className="text-green-100 w-5 h-5 md:w-6 md:h-6" />
              </div>
-             <span className="font-bold text-lg md:text-xl tracking-tight text-white truncate">Solawi<span className="text-green-200">Manager</span></span>
+             <span className="font-bold text-lg md:text-xl tracking-tight text-white truncate flex items-center gap-1.5">
+                Solawi<span className="text-green-200">Manager</span>
+                <span className="text-xs font-normal border border-green-400/30 rounded px-1.5 py-0.5 bg-green-900/20 text-green-100">v2</span>
+             </span>
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
