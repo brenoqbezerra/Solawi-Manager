@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from '../i18n';
 import { Language } from '../types';
-import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp, Wind } from 'lucide-react';
+import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp, Wind, Smartphone, MessageCircle, Eye } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -204,13 +204,30 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         <Calendar size={14} className="text-slate-400"/> 2026
                                      </div>
                                 </div>
-                                <div className="relative h-48 w-full flex items-end justify-between gap-1 md:gap-2 px-2">
+                                <div className="relative h-48 w-full flex items-end justify-between gap-1 md:gap-2 px-2 overflow-hidden">
                                     {/* Grid Lines */}
                                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
                                         <div className="border-t border-slate-200 w-full h-full"></div>
                                         <div className="border-t border-slate-200 w-full h-full"></div>
                                         <div className="border-t border-slate-200 w-full h-full"></div>
                                     </div>
+
+                                    {/* Line Chart Overlay (Simulated with SVG) */}
+                                    <svg className="absolute inset-0 w-full h-40 top-0 pointer-events-none z-20" preserveAspectRatio="none">
+                                        <polyline 
+                                            fill="none" 
+                                            stroke="#15803d" 
+                                            strokeWidth="2"
+                                            points="
+                                                0,100  30,80  60,110 
+                                                90,40  120,80  150,55 
+                                                180,25  210,60  240,90 
+                                                270,120  300,140  330,150
+                                            "
+                                            className="opacity-80"
+                                            vectorEffect="non-scaling-stroke"
+                                        />
+                                    </svg>
 
                                     {[
                                         { p: 40, r: 42 }, { p: 60, r: 58 }, { p: 30, r: 35 }, 
@@ -227,12 +244,12 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                                     {/* Bar (Planned) */}
                                                     <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80 mx-auto" style={{ height: `${val.p}%` }}></div>
                                                     
-                                                    {/* Line Point (Realized) - Simulated */}
-                                                    <div className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-10" style={{ bottom: `${val.r}%` }}></div>
+                                                    {/* Dot Point (Realized) */}
+                                                    <div className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-30" style={{ bottom: `${val.r}%` }}></div>
                                                 </div>
                                                 
                                                 {/* Month Label - Properly Aligned Below */}
-                                                <div className="text-[9px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full">
+                                                <div className="text-[8px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full overflow-hidden">
                                                     {monthName}
                                                 </div>
                                             </div>
@@ -364,12 +381,12 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {[
-                        { icon: LayoutIcon, text: t('lp_feat_dashboard') },
-                        { icon: Calendar, text: t('lp_feat_kw') },
+                        { icon: Eye, text: t('lp_feat_dashboard') },
                         { icon: CheckCircle, text: t('lp_feat_harvest') },
+                        { icon: Calendar, text: t('lp_feat_kw') },
                         { icon: Sun, text: t('lp_feat_weather') },
-                        { icon: Globe, text: t('lp_feat_responsive') },
-                        { icon: Globe, text: t('lp_global_reach') },
+                        { icon: Smartphone, text: t('lp_feat_responsive') },
+                        { icon: MessageCircle, text: t('lp_feat_lang') },
                     ].map((feat, i) => (
                         <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                             <div className="bg-green-100 p-2 rounded-lg text-green-700 shrink-0">
