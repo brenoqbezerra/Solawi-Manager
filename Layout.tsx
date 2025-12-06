@@ -74,7 +74,7 @@ const Layout: React.FC<Props> = ({ children, onGoHome }) => {
                 </button>
 
                 {isLangOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-100 origin-top-right max-h-60 overflow-y-auto">
+                    <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-100 origin-top-right">
                         <ul className="py-1">
                             {languages.map((l) => (
                                 <li key={l.code}>

@@ -204,7 +204,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         <Calendar size={14} className="text-slate-400"/> 2026
                                      </div>
                                 </div>
-                                <div className="relative h-48 w-full flex items-end justify-between gap-1 md:gap-2 px-2 overflow-hidden">
+                                <div className="relative h-48 w-full flex items-end justify-between gap-0.5 md:gap-2 px-2 overflow-hidden">
                                     {/* Grid Lines */}
                                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
                                         <div className="border-t border-slate-200 w-full h-full"></div>
@@ -221,7 +221,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         // Dynamic Month Name based on Language
                                         const monthName = new Date(2024, i, 1).toLocaleString(lang === 'de' ? 'de-DE' : lang, { month: 'short' });
                                         return (
-                                            <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
+                                            <div key={i} className="flex-1 flex flex-col justify-end h-full relative group min-w-0">
                                                 {/* Bar Container */}
                                                 <div className="relative w-full h-full flex items-end">
                                                     {/* Bar (Planned) */}
@@ -229,7 +229,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                                 </div>
                                                 
                                                 {/* Month Label - Properly Aligned Below */}
-                                                <div className="text-[8px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full overflow-hidden">
+                                                <div className="text-[8px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full overflow-hidden px-[1px]">
                                                     {monthName}
                                                 </div>
                                             </div>
@@ -283,7 +283,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                                 </td>
                                                 <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('field')} 2</td>
                                                 <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
-                                                    KW 42 <span className="text-xs text-slate-400 block font-sans">150 kg</span>
+                                                    {t('weekAbbr')} 42 <span className="text-xs text-slate-400 block font-sans">150 kg</span>
                                                 </td>
                                                 <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">
@@ -303,7 +303,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                                 </td>
                                                 <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('tunnel')} 1</td>
                                                 <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
-                                                    KW 38 <span className="text-xs text-slate-400 block font-sans">80 {t('unit_units')}</span>
+                                                    {t('weekAbbr')} 38 <span className="text-xs text-slate-400 block font-sans">80 {t('unit_units')}</span>
                                                 </td>
                                                 <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">

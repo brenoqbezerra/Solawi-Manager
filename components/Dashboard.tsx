@@ -470,7 +470,7 @@ const Dashboard: React.FC = () => {
                           {crop.location}
                         </td>
                         <td className="p-3 text-sm text-slate-600 font-mono border-r border-slate-50/50 text-center">
-                          KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
+                          {t('weekAbbr')} {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>
                         <td className="p-3 text-center">
