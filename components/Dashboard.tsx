@@ -393,16 +393,16 @@ const Dashboard: React.FC = () => {
           {/* Table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1000px] border-collapse">
+              <table className="w-full min-w-[1000px] xl:min-w-full xl:w-full border-collapse">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('culture')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('plantMonth')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestMonth')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('status')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('location')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestWeek')}</th>
-                    <th className="p-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('culture')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('plantMonth')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestMonth')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('status')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('location')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider border-r border-slate-100">{t('harvestWeek')}</th>
+                    <th className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{t('actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -449,31 +449,31 @@ const Dashboard: React.FC = () => {
 
                     return (
                       <tr key={crop.id} className={rowClasses}>
-                        <td className="p-4 border-r border-slate-50/50 text-center">
+                        <td className="p-3 border-r border-slate-50/50 text-center">
                           <div className={`font-semibold ${crop.status === CropStatus.HARVESTED ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{crop.name}</div>
                           <div className="text-xs text-slate-500 font-medium">{crop.variety}</div>
                           {crop.notes && <div className="text-[10px] text-slate-400 mt-1 italic max-w-[150px] truncate mx-auto">{crop.notes}</div>}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50 text-center">
+                        <td className="p-3 text-sm text-slate-600 border-r border-slate-50/50 text-center">
                             {getMonthNameFromIso(crop.plantDateIso)}
                         </td>
-                         <td className="p-4 text-sm text-slate-600 border-r border-slate-50/50 text-center">
+                         <td className="p-3 text-sm text-slate-600 border-r border-slate-50/50 text-center">
                             {getMonthNameFromIso(crop.harvestDateIso)}
                         </td>
-                        <td className="p-4 text-center border-r border-slate-50/50">
+                        <td className="p-3 text-center border-r border-slate-50/50">
                           {/* Mobile Friendly Badge: multiline allowed, min-width */}
                           <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ring-1 ring-inset inline-block leading-tight min-w-[90px] h-auto whitespace-normal ${badgeColorClasses[statusColor]}`}>
                             {statusLabels[statusColor] || statusLabels['green']}
                           </span>
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-medium border-r border-slate-50/50 text-center">
+                        <td className="p-3 text-sm text-slate-600 font-medium border-r border-slate-50/50 text-center">
                           {crop.location}
                         </td>
-                        <td className="p-4 text-sm text-slate-600 font-mono border-r border-slate-50/50 text-center">
+                        <td className="p-3 text-sm text-slate-600 font-mono border-r border-slate-50/50 text-center">
                           KW {crop.harvestWeek} <span className="text-xs text-slate-400">({crop.harvestYear})</span>
                           <span className="text-xs text-slate-400 block font-sans">{crop.expectedYield} {unitLabel}</span>
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-3 text-center">
                           <div className="flex justify-center gap-2">
                              {/* Harvest Button */}
                             {crop.status !== CropStatus.HARVESTED && (

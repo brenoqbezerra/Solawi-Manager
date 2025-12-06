@@ -141,7 +141,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="hidden md:flex bg-white/10 px-3 py-1 rounded text-xs text-white items-center gap-2">
-                                    <span>🇩🇪 Deutsch</span>
+                                    <span>{currentLang.flag} {currentLang.label}</span>
                                 </div>
                             </div>
                         </div>
@@ -174,10 +174,10 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                     <div className="flex gap-2 min-w-max">
                                         {[
                                             { d: t('today'), tH: '18°', tL: '10°', i: Sun, c: 'text-yellow-400', today: true },
-                                            { d: 'Mo', tH: '20°', tL: '12°', i: Cloud, c: 'text-blue-100', today: false },
-                                            { d: 'Di', tH: '19°', tL: '11°', i: CloudRain, c: 'text-blue-300', today: false },
-                                            { d: 'Mi', tH: '22°', tL: '14°', i: Sun, c: 'text-yellow-400', today: false },
-                                            { d: 'Do', tH: '21°', tL: '13°', i: Cloud, c: 'text-slate-300', today: false }
+                                            { d: '+1', tH: '20°', tL: '12°', i: Cloud, c: 'text-blue-100', today: false },
+                                            { d: '+2', tH: '19°', tL: '11°', i: CloudRain, c: 'text-blue-300', today: false },
+                                            { d: '+3', tH: '22°', tL: '14°', i: Sun, c: 'text-yellow-400', today: false },
+                                            { d: '+4', tH: '21°', tL: '13°', i: Cloud, c: 'text-slate-300', today: false }
                                         ].map((day, idx) => (
                                             <div key={idx} className={`flex flex-col items-center justify-between bg-white/10 border ${day.today ? 'border-yellow-400/50 bg-white/20' : 'border-white/5'} rounded-lg p-2 backdrop-blur-sm h-32 w-16 md:w-20 flex-shrink-0`}>
                                                 <span className="text-[10px] md:text-xs font-semibold uppercase opacity-90">{day.d}</span>
@@ -201,10 +201,10 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         {t('chartTitle')}
                                      </h3>
                                      <div className="bg-slate-50 border px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 flex items-center gap-2">
-                                        <Calendar size={14} className="text-slate-400"/> 2024
+                                        <Calendar size={14} className="text-slate-400"/> 2026
                                      </div>
                                 </div>
-                                <div className="relative h-48 w-full flex items-end justify-between gap-2 md:gap-4 px-2">
+                                <div className="relative h-48 w-full flex items-end justify-between gap-1 md:gap-2 px-2">
                                     {/* Grid Lines */}
                                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
                                         <div className="border-t border-slate-200 w-full h-full"></div>
@@ -217,19 +217,27 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         { p: 80, r: 75 }, { p: 50, r: 50 }, { p: 70, r: 65 }, 
                                         { p: 90, r: 85 }, { p: 60, r: 62 }, { p: 40, r: 38 }, 
                                         { p: 20, r: 25 }, { p: 10, r: 12 }, { p: 5, r: 5 }
-                                    ].map((val, i) => (
-                                        <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
-                                            {/* Bar (Planned) */}
-                                            <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80" style={{ height: `${val.p}%` }}></div>
-                                            
-                                            {/* Line Point (Realized) - Simulated */}
-                                            <div className="absolute w-2 h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-10" style={{ bottom: `${val.r}%` }}></div>
-                                        </div>
-                                    ))}
-                                </div>
-                                {/* X Axis Labels */}
-                                <div className="flex justify-between mt-2 text-[10px] text-slate-400 uppercase font-bold px-2">
-                                    <span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+                                    ].map((val, i) => {
+                                        // Dynamic Month Name based on Language
+                                        const monthName = new Date(2024, i, 1).toLocaleString(lang === 'de' ? 'de-DE' : lang, { month: 'short' });
+                                        return (
+                                            <div key={i} className="flex-1 flex flex-col justify-end h-full relative group">
+                                                {/* Bar & Line Container */}
+                                                <div className="relative w-full h-full flex items-end">
+                                                    {/* Bar (Planned) */}
+                                                    <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80 mx-auto" style={{ height: `${val.p}%` }}></div>
+                                                    
+                                                    {/* Line Point (Realized) - Simulated */}
+                                                    <div className="absolute w-1.5 h-1.5 md:w-2 md:h-2 bg-green-700 rounded-full left-1/2 -translate-x-1/2 border border-white shadow-sm z-10" style={{ bottom: `${val.r}%` }}></div>
+                                                </div>
+                                                
+                                                {/* Month Label - Properly Aligned Below */}
+                                                <div className="text-[9px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full">
+                                                    {monthName}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
 
@@ -270,13 +278,13 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                             {/* Row 1: Active */}
                                             <tr className="hover:bg-slate-50/50">
                                                 <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <div className="font-semibold text-slate-800 text-left">Kürbis</div>
+                                                    <div className="font-semibold text-slate-800 text-left">{t('mock_pumpkin')}</div>
                                                     <div className="text-xs text-slate-500 text-left">Hokkaido</div>
                                                 </td>
                                                 <td className="px-4 py-3 text-center border-r border-slate-50/50">
                                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200 ring-1 ring-green-500/20 whitespace-normal min-w-[90px] inline-block">{t('growing')}</span>
                                                 </td>
-                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">Feld 2</td>
+                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('field')} 2</td>
                                                 <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
                                                     KW 42 <span className="text-xs text-slate-400 block font-sans">150 kg</span>
                                                 </td>
@@ -290,15 +298,15 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                             {/* Row 2: Warning */}
                                             <tr className="bg-amber-50 hover:bg-amber-100">
                                                 <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <div className="font-semibold text-slate-800 text-left">Salat</div>
+                                                    <div className="font-semibold text-slate-800 text-left">{t('mock_lettuce')}</div>
                                                     <div className="text-xs text-slate-500 text-left">Lollo Rosso</div>
                                                 </td>
                                                 <td className="px-4 py-3 text-center border-r border-slate-50/50">
                                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 ring-1 ring-amber-500/20 whitespace-normal min-w-[90px] inline-block">{t('harvestDue')}</span>
                                                 </td>
-                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">Tunnel 1</td>
+                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('tunnel')} 1</td>
                                                 <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
-                                                    KW 38 <span className="text-xs text-slate-400 block font-sans">80 Stück</span>
+                                                    KW 38 <span className="text-xs text-slate-400 block font-sans">80 {t('unit_units')}</span>
                                                 </td>
                                                 <td className="px-4 py-3 text-center">
                                                     <div className="flex justify-center gap-2 opacity-50">

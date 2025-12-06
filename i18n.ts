@@ -78,6 +78,10 @@ const translations = {
     developedBy: "Entwickelt von",
     backToLanding: "Startseite",
 
+    // Mock Data Keys
+    mock_pumpkin: "Kürbis",
+    mock_lettuce: "Salat",
+
     // Landing Page Keys
     lp_hero_title: "Einfache Anbauplanung für Solidarische Landwirtschaft",
     lp_hero_subtitle: "Kostenloses, lokales Werkzeug für Solawis und kleine Höfe. Offline-first, mehrsprachig und fokussiert auf das Wesentliche.",
@@ -171,6 +175,10 @@ const translations = {
     harvestMonth: "Harvest Month",
     developedBy: "Developed by",
     backToLanding: "Home Page",
+
+    // Mock Data Keys
+    mock_pumpkin: "Pumpkin",
+    mock_lettuce: "Lettuce",
 
     // Landing Page Keys
     lp_hero_title: "Simple Crop Planning for Community Supported Agriculture",
@@ -266,6 +274,10 @@ const translations = {
     developedBy: "Desarrollado por",
     backToLanding: "Inicio",
 
+    // Mock Data Keys
+    mock_pumpkin: "Calabaza",
+    mock_lettuce: "Lechuga",
+
     // Landing Page Keys
     lp_hero_title: "Planificación de Cultivos Simple para Agricultura Solidaria",
     lp_hero_subtitle: "Herramienta gratuita y local para CSAs y pequeñas granjas. Offline-first, multilingüe y enfocada en lo esencial.",
@@ -274,7 +286,7 @@ const translations = {
     lp_story_title: "Concebido a partir de la observación, curiosidad y el deseo de ayudar",
     lp_story_wandel: "En las afueras de Dresde, entre campos de centeno, rebaños de ovejas y el bosque de pollos de Wandelgrund, surgió la pregunta: ¿Cómo puede la tecnología simplificar el trabajo en la granja, sin eclipsarlo?",
     lp_story_wirgarten: "Investigando sobre cooperativas en Alemania, encontré un proyecto increíble llamado WirGarten y decidí inspirarme para digitalizar una herramienta de planificación de cultivos creada por ellos y disponible gratuitamente.",
-    lp_story_mvp: "Un MVP — conscientemente simples, almacenado localmente, sin inicio de sesión. No es perfecto, pero es útil. Y listo para crecer con tu ayuda.",
+    lp_story_mvp: "Un MVP — conscientemente simples, almacenado localmente, sin inicio de sesión. No es perfecto, pero es útil. E listo para crecer con tu ayuda.",
     lp_global_reach: "Disponible en alemán, inglés, español, francés y portugués — porque las buenas ideas para la agricultura solidaria no conocen fronteras.",
     lp_feat_dashboard: "Panel con vista en tiempo real (Cultivos activos, Cosechas planificadas)",
     lp_feat_kw: "Planificación basada en semanas (KW) con transición de año",
@@ -359,6 +371,10 @@ const translations = {
     harvestMonth: "Mois Récolte",
     developedBy: "Développé par",
     backToLanding: "Accueil",
+
+    // Mock Data Keys
+    mock_pumpkin: "Citrouille",
+    mock_lettuce: "Laitue",
 
     // Landing Page Keys
     lp_hero_title: "Planification des Cultures Simple pour l'Agriculture Solidaire",
@@ -453,6 +469,10 @@ const translations = {
     harvestMonth: "Mês Colheita",
     developedBy: "Desenvolvido por",
     backToLanding: "Página Inicial",
+
+    // Mock Data Keys
+    mock_pumpkin: "Abóbora",
+    mock_lettuce: "Alface",
 
     // Landing Page Keys
     lp_hero_title: "Planejamento de Cultivo Simples para Agricultura Solidaria",
