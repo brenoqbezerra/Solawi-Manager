@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from '../i18n';
 import { Language } from '../types';
-import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, Pencil, Trash2, MapPin, Cloud, CloudRain, TrendingUp, Wind, Smartphone, MessageCircle, Eye } from 'lucide-react';
+import { Sprout, ChevronDown, CheckCircle, Sun, Calendar, Layout as LayoutIcon, Globe, Heart, Tractor, MapPin, Cloud, Smartphone, MessageCircle, Eye, Plus, Menu, TrendingUp } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -128,196 +128,134 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                     </a>
                 </div>
 
-                {/* Simulated Dashboard UI - Realistic Preview */}
-                <div className="relative w-full max-w-5xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden text-left transform md:rotate-1 hover:rotate-0 transition-transform duration-500">
-                        {/* Fake Header */}
-                        <div className="h-14 bg-gradient-to-r from-green-800 to-green-700 flex items-center px-4 md:px-6 justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="bg-white/10 p-1.5 rounded-lg">
-                                    <Sprout size={20} className="text-green-100" />
-                                </div>
-                                <span className="text-white font-bold tracking-tight">Solawi<span className="text-green-200">Manager</span> <span className="text-xs font-normal border border-green-400/30 rounded px-1.5 py-0.5 bg-green-900/20 text-green-100">v2</span></span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="hidden md:flex bg-white/10 px-3 py-1 rounded text-xs text-white items-center gap-2">
-                                    <span>{currentLang.flag} {currentLang.label}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="p-4 md:p-6 bg-slate-50 space-y-4 md:space-y-6">
+                {/* CSS ART: Farm Scene with Phone */}
+                <div className="relative w-full max-w-4xl mx-auto h-[500px] md:h-[600px] bg-sky-300 rounded-[3rem] overflow-hidden shadow-2xl border-4 border-slate-200/50 mt-4 group">
+                    
+                    {/* Sky Elements */}
+                    <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-300 rounded-full shadow-[0_0_60px_rgba(253,224,71,0.6)] animate-pulse"></div>
+                    <div className="absolute top-20 left-20 text-white/80 opacity-90 animate-[bounce_4s_infinite]"><Cloud size={80} fill="currentColor" /></div>
+                    <div className="absolute top-32 right-1/3 text-white/60 opacity-70 animate-[pulse_5s_infinite]"><Cloud size={56} fill="currentColor" /></div>
+
+                    {/* Hills Background */}
+                    <div className="absolute bottom-[-100px] left-[-20%] w-[140%] h-[350px] bg-green-300 rounded-[100%] shadow-lg"></div>
+                    <div className="absolute bottom-[-120px] right-[-10%] w-[120%] h-[300px] bg-green-400 rounded-[100%] shadow-md"></div>
+                    <div className="absolute bottom-[-80px] left-0 w-full h-[200px] bg-green-600 rounded-[50%] flex items-start justify-center pt-8 shadow-inner"></div>
+
+                    {/* The Phone (Centered) */}
+                    <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 transition-transform duration-700 hover:-translate-y-4 z-10 scale-[0.75] md:scale-90 origin-bottom">
+                        <div className="relative w-[280px] md:w-[300px] h-[580px] bg-slate-900 rounded-[3rem] border-8 border-slate-900 shadow-2xl overflow-hidden ring-4 ring-slate-900/20">
                             
-                            {/* Simulated Weather Widget - Replicates Real System */}
-                            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 md:p-6 text-white shadow-md flex flex-col md:flex-row justify-between items-end gap-4 relative overflow-hidden">
-                                {/* Left Side: Current */}
-                                <div className="flex flex-row md:flex-col justify-between items-center md:items-start w-full md:w-auto z-10">
-                                    <div>
-                                        <div className="flex items-center gap-1.5 mb-1 opacity-90 text-sm">
-                                            <MapPin size={14} /> Berlin
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-4xl md:text-6xl font-bold tracking-tighter">18°</span>
-                                            <div className="bg-white/10 p-2 rounded-xl backdrop-blur-md border border-white/10">
-                                                <Sun className="text-yellow-400 w-8 h-8 md:w-10 md:h-10" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-1 text-xs md:text-sm text-blue-100 bg-white/10 px-2 py-1 rounded-lg mt-0 md:mt-2">
-                                        <Wind className="w-3.5 h-3.5" />
-                                        <span>12 km/h</span>
-                                    </div>
-                                </div>
+                            {/* Screen Content - pointer-events-none prevents scrolling issues on mobile */}
+                            <div className="w-full h-full bg-slate-50 rounded-[2.5rem] overflow-hidden flex flex-col relative pointer-events-none">
                                 
-                                {/* Right Side: Forecast (Scrollable on Mobile) */}
-                                <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide z-10">
-                                    <div className="flex gap-2 min-w-max">
+                                {/* Status Bar area */}
+                                <div className="h-7 bg-slate-900 w-full absolute top-0 z-20 flex justify-center pointer-events-none">
+                                    <div className="w-24 h-5 bg-black rounded-b-xl"></div>
+                                </div>
+
+                                {/* App Header */}
+                                <div className="pt-9 pb-3 px-4 bg-gradient-to-r from-green-800 to-green-700 text-white flex justify-between items-center shrink-0 shadow-sm z-10">
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="bg-white/10 p-1 rounded backdrop-blur-sm"><Sprout size={16} className="text-green-100"/></div>
+                                        <span className="font-bold text-sm tracking-tight">Solawi<span className="text-green-200">Manager</span> <span className="text-[9px] font-normal border border-green-400/30 rounded px-1 bg-green-900/20 text-green-100">v2</span></span>
+                                    </div>
+                                    <Menu size={18} className="text-white opacity-80" />
+                                </div>
+
+                                {/* App Content - Overflow Hidden (Static Preview) */}
+                                <div className="flex-1 p-3 space-y-3 bg-slate-50 overflow-hidden flex flex-col">
+                                    
+                                    {/* Weather Widget */}
+                                    <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-3 text-white shadow-md relative overflow-hidden shrink-0">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <div className="flex items-center gap-1 text-[10px] opacity-90"><MapPin size={10}/> Berlin</div>
+                                                <div className="text-3xl font-bold mt-1">22°</div>
+                                            </div>
+                                            <Sun className="text-yellow-300" size={24} />
+                                        </div>
+                                        {/* Mini Forecast Row */}
+                                        <div className="flex justify-between mt-2 pt-2 border-t border-white/20">
+                                            {[0, 1, 2, 3, 4].map((i) => (
+                                                <div key={i} className="flex flex-col items-center">
+                                                    <span className="text-[8px] opacity-80">
+                                                        {new Date(Date.now() + i * 86400000).toLocaleDateString(lang === 'de' ? 'de-DE' : lang, {weekday:'narrow'})}
+                                                    </span>
+                                                    <div className="h-1 w-1 rounded-full bg-white/50 my-0.5"></div>
+                                                    <span className="text-[9px] font-bold">{22 - i}°</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Analytical Chart (Bars + Line) */}
+                                    <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm shrink-0">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
+                                                <TrendingUp size={10} className="text-slate-400"/> {t('chartTitle')}
+                                            </div>
+                                            <div className="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 font-medium">2026</div>
+                                        </div>
+                                        
+                                        <div className="relative h-20 w-full">
+                                            {/* Bars (Planned) */}
+                                            <div className="absolute inset-0 flex items-end gap-1 px-1">
+                                                {[40, 65, 45, 80, 55, 70, 60, 50, 75, 60, 45, 80].map((h, i) => (
+                                                    <div key={i} className="flex-1 flex flex-col justify-end">
+                                                        <div className="w-full bg-blue-300 rounded-t-sm" style={{height: `${h}%`}}></div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {/* Line (Realized) - SVG Overlay */}
+                                            <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                                                <polyline 
+                                                    points="0,60 20,40 40,55 60,20 80,45 100,30 120,40 140,50 160,25 180,40 200,55 220,20" 
+                                                    fill="none" 
+                                                    stroke="#15803d" 
+                                                    strokeWidth="2" 
+                                                    vectorEffect="non-scaling-stroke"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    {/* Task List (Table Preview) */}
+                                    <div className="flex-1 space-y-2 overflow-hidden relative">
+                                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t('activeCrops')}</div>
                                         {[
-                                            { d: t('today'), tH: '18°', tL: '10°', i: Sun, c: 'text-yellow-400', today: true },
-                                            { d: '+1', tH: '20°', tL: '12°', i: Cloud, c: 'text-blue-100', today: false },
-                                            { d: '+2', tH: '19°', tL: '11°', i: CloudRain, c: 'text-blue-300', today: false },
-                                            { d: '+3', tH: '22°', tL: '14°', i: Sun, c: 'text-yellow-400', today: false },
-                                            { d: '+4', tH: '21°', tL: '13°', i: Cloud, c: 'text-slate-300', today: false }
-                                        ].map((day, idx) => (
-                                            <div key={idx} className={`flex flex-col items-center justify-between bg-white/10 border ${day.today ? 'border-yellow-400/50 bg-white/20' : 'border-white/5'} rounded-lg p-2 backdrop-blur-sm h-32 w-16 md:w-20 flex-shrink-0`}>
-                                                <span className="text-[10px] md:text-xs font-semibold uppercase opacity-90">{day.d}</span>
-                                                <day.i size={24} className={`my-1 ${day.c}`} />
-                                                <div className="flex flex-col items-center w-full gap-0.5">
-                                                    <span className="text-xs md:text-sm font-bold">{day.tH}</span>
-                                                    <div className="w-full h-[1px] bg-white/20 my-0.5 block"></div>
-                                                    <span className="text-[10px] opacity-75">{day.tL}</span>
+                                            { n: t('mock_pumpkin'), s: 'growing', c: 'emerald', i: '42' },
+                                            { n: t('mock_lettuce'), s: 'harvestDue', c: 'amber', i: '38' },
+                                            { n: 'Tomaten', s: 'harvestOverdue', c: 'red', i: '35' },
+                                            { n: 'Zucchini', s: 'growing', c: 'emerald', i: '45' },
+                                        ].map((item, i) => (
+                                            <div key={i} className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center">
+                                                <div className="flex items-center gap-2.5">
+                                                    <div className={`w-1.5 h-6 rounded-full bg-${item.c}-500`}></div>
+                                                    <div>
+                                                        <div className="font-bold text-xs text-slate-800">{item.n}</div>
+                                                        <div className={`text-[9px] mt-0 font-medium text-${item.c}-600 leading-none`}>
+                                                            {t(item.s as any)}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right bg-slate-50 px-1.5 py-0.5 rounded">
+                                                    <div className="font-mono text-[9px] text-slate-500 font-bold">KW {item.i}</div>
                                                 </div>
                                             </div>
                                         ))}
+                                        {/* Fade out effect at bottom */}
+                                        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none"></div>
                                     </div>
                                 </div>
-                            </div>
-
-                             {/* Simulated Chart (Planned vs Realized) */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6" style={{ minHeight: '300px' }}>
-                                <div className="flex justify-between items-center mb-6">
-                                     <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                                        <TrendingUp size={18} className="text-slate-400"/>
-                                        {t('chartTitle')}
-                                     </h3>
-                                     <div className="bg-slate-50 border px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 flex items-center gap-2">
-                                        <Calendar size={14} className="text-slate-400"/> 2026
-                                     </div>
-                                </div>
-                                <div className="relative h-48 w-full flex items-end justify-between gap-0.5 md:gap-2 px-2 overflow-hidden">
-                                    {/* Grid Lines */}
-                                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30">
-                                        <div className="border-t border-slate-200 w-full h-full"></div>
-                                        <div className="border-t border-slate-200 w-full h-full"></div>
-                                        <div className="border-t border-slate-200 w-full h-full"></div>
-                                    </div>
-
-                                    {[
-                                        { p: 40 }, { p: 60 }, { p: 30 }, 
-                                        { p: 80 }, { p: 50 }, { p: 70 }, 
-                                        { p: 90 }, { p: 60 }, { p: 40 }, 
-                                        { p: 20 }, { p: 10 }, { p: 5 }
-                                    ].map((val, i) => {
-                                        // Dynamic Month Name based on Language
-                                        const monthName = new Date(2024, i, 1).toLocaleString(lang === 'de' ? 'de-DE' : lang, { month: 'short' });
-                                        return (
-                                            <div key={i} className="flex-1 flex flex-col justify-end h-full relative group min-w-0">
-                                                {/* Bar Container */}
-                                                <div className="relative w-full h-full flex items-end">
-                                                    {/* Bar (Planned) */}
-                                                    <div className="w-full bg-blue-300 rounded-t-sm transition-all duration-500 hover:opacity-80 mx-auto" style={{ height: `${val.p}%` }}></div>
-                                                </div>
-                                                
-                                                {/* Month Label - Properly Aligned Below */}
-                                                <div className="text-[8px] md:text-[10px] text-slate-400 uppercase font-bold text-center mt-2 truncate w-full overflow-hidden px-[1px]">
-                                                    {monthName}
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* KPI Row */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                                <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200/60 flex flex-col items-center justify-center gap-1 h-32">
-                                    <span className="text-[10px] font-bold text-green-600 uppercase text-center">{t('inProgress')}</span>
-                                    <span className="text-3xl font-bold text-green-700">12</span>
-                                </div>
-                                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200/60 flex flex-col items-center justify-center gap-1 h-32">
-                                    <span className="text-[10px] font-bold text-amber-600 uppercase text-center">{t('harvestThisWeek')}</span>
-                                    <span className="text-3xl font-bold text-amber-700">3</span>
-                                </div>
-                                <div className="bg-red-50 p-3 md:p-4 rounded-xl border border-red-200/60 flex flex-col items-center justify-center gap-1 h-32">
-                                    <span className="text-[10px] font-bold text-red-600 uppercase text-center">{t('harvestOverdue')}</span>
-                                    <span className="text-3xl font-bold text-red-700">1</span>
-                                </div>
-                                <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200/60 flex flex-col items-center justify-center gap-1 h-32">
-                                    <span className="text-[10px] font-bold text-blue-600 uppercase text-center">{t('harvested')}</span>
-                                    <span className="text-3xl font-bold text-blue-700">45</span>
-                                </div>
-                            </div>
-
-                            {/* Fake Table */}
-                            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-sm text-left">
-                                        <thead className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase font-bold text-center">
-                                            <tr>
-                                                <th className="px-4 py-3 text-left">{t('culture')}</th>
-                                                <th className="px-4 py-3">{t('status')}</th>
-                                                <th className="px-4 py-3 hidden md:table-cell">{t('location')}</th>
-                                                <th className="px-4 py-3">{t('harvestWeek')}</th>
-                                                <th className="px-4 py-3">{t('actions')}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-slate-50">
-                                            {/* Row 1: Active */}
-                                            <tr className="hover:bg-slate-50/50">
-                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <div className="font-semibold text-slate-800 text-left">{t('mock_pumpkin')}</div>
-                                                    <div className="text-xs text-slate-500 text-left">Hokkaido</div>
-                                                </td>
-                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200 ring-1 ring-green-500/20 whitespace-normal min-w-[90px] inline-block">{t('growing')}</span>
-                                                </td>
-                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('field')} 2</td>
-                                                <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
-                                                    {t('weekAbbr')} 42 <span className="text-xs text-slate-400 block font-sans">150 kg</span>
-                                                </td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <div className="flex justify-center gap-2 opacity-50">
-                                                        <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
-                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {/* Row 2: Warning */}
-                                            <tr className="bg-amber-50 hover:bg-amber-100">
-                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <div className="font-semibold text-slate-800 text-left">{t('mock_lettuce')}</div>
-                                                    <div className="text-xs text-slate-500 text-left">Lollo Rosso</div>
-                                                </td>
-                                                <td className="px-4 py-3 text-center border-r border-slate-50/50">
-                                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 ring-1 ring-amber-500/20 whitespace-normal min-w-[90px] inline-block">{t('harvestDue')}</span>
-                                                </td>
-                                                <td className="px-4 py-3 text-center hidden md:table-cell text-slate-500 border-r border-slate-50/50">{t('tunnel')} 1</td>
-                                                <td className="px-4 py-3 text-center font-mono text-slate-600 border-r border-slate-50/50">
-                                                    {t('weekAbbr')} 38 <span className="text-xs text-slate-400 block font-sans">80 {t('unit_units')}</span>
-                                                </td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <div className="flex justify-center gap-2 opacity-50">
-                                                        <div className="p-1.5 bg-slate-100 rounded"><Tractor size={14}/></div>
-                                                        <div className="p-1.5 bg-slate-100 rounded"><Pencil size={14}/></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                
+                                {/* FAB */}
+                                <div className="absolute bottom-5 right-5 bg-green-700 p-3 rounded-2xl shadow-xl text-white shadow-green-900/20">
+                                    <Plus size={20} />
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
