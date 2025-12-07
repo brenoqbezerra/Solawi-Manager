@@ -142,11 +142,11 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                     <div className="absolute bottom-[-80px] left-0 w-full h-[200px] bg-green-600 rounded-[50%] flex items-start justify-center pt-8 shadow-inner"></div>
 
                     {/* The Phone (Centered) */}
-                    <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 transition-transform duration-700 hover:-translate-y-4 z-10 scale-[0.75] md:scale-90 origin-bottom">
+                    <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 z-10 scale-[0.7] md:scale-90 origin-bottom">
                         <div className="relative w-[280px] md:w-[300px] h-[580px] bg-slate-900 rounded-[3rem] border-8 border-slate-900 shadow-2xl overflow-hidden ring-4 ring-slate-900/20">
                             
                             {/* Screen Content - pointer-events-none prevents scrolling issues on mobile */}
-                            <div className="w-full h-full bg-slate-50 rounded-[2.5rem] overflow-hidden flex flex-col relative pointer-events-none">
+                            <div className="w-full h-full bg-slate-50 rounded-[2.5rem] overflow-hidden flex flex-col relative pointer-events-none select-none">
                                 
                                 {/* Status Bar area */}
                                 <div className="h-7 bg-slate-900 w-full absolute top-0 z-20 flex justify-center pointer-events-none">
@@ -188,7 +188,7 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                         </div>
                                     </div>
 
-                                    {/* Analytical Chart (Bars + Line) */}
+                                    {/* Analytical Chart (Bars only) */}
                                     <div className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm shrink-0">
                                         <div className="flex justify-between items-center mb-2">
                                             <div className="flex items-center gap-1 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
@@ -197,54 +197,48 @@ const LandingPage: React.FC<Props> = ({ onStart }) => {
                                             <div className="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 font-medium">2026</div>
                                         </div>
                                         
-                                        <div className="relative h-20 w-full">
-                                            {/* Bars (Planned) */}
-                                            <div className="absolute inset-0 flex items-end gap-1 px-1">
-                                                {[40, 65, 45, 80, 55, 70, 60, 50, 75, 60, 45, 80].map((h, i) => (
-                                                    <div key={i} className="flex-1 flex flex-col justify-end">
-                                                        <div className="w-full bg-blue-300 rounded-t-sm" style={{height: `${h}%`}}></div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            {/* Line (Realized) - SVG Overlay */}
-                                            <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
-                                                <polyline 
-                                                    points="0,60 20,40 40,55 60,20 80,45 100,30 120,40 140,50 160,25 180,40 200,55 220,20" 
-                                                    fill="none" 
-                                                    stroke="#15803d" 
-                                                    strokeWidth="2" 
-                                                    vectorEffect="non-scaling-stroke"
-                                                />
-                                            </svg>
+                                        {/* Matches original dashboard color (blue-300 = #93c5fd) */}
+                                        <div className="relative h-20 w-full flex items-end gap-1">
+                                            {[40, 65, 45, 80, 55, 70, 60, 50, 75, 60, 45, 80].map((h, i) => (
+                                                <div key={i} className="flex-1 bg-blue-300 rounded-t-[1px]" style={{height: `${h}%`}}></div>
+                                            ))}
                                         </div>
                                     </div>
 
-                                    {/* Task List (Table Preview) */}
-                                    <div className="flex-1 space-y-2 overflow-hidden relative">
-                                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{t('activeCrops')}</div>
+                                    {/* Task List (Table Preview) - Optimized Layout */}
+                                    <div className="flex-1 space-y-1.5 overflow-hidden relative p-1">
+                                        <div className="flex justify-between items-end mb-1 px-1">
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t('activeCrops')}</div>
+                                            {/* Removed week number text */}
+                                        </div>
                                         {[
-                                            { n: t('mock_pumpkin'), s: 'growing', c: 'emerald', i: '42' },
-                                            { n: t('mock_lettuce'), s: 'harvestDue', c: 'amber', i: '38' },
-                                            { n: 'Tomaten', s: 'harvestOverdue', c: 'red', i: '35' },
-                                            { n: 'Zucchini', s: 'growing', c: 'emerald', i: '45' },
+                                            { n: t('mock_pumpkin'), s: 'growing', c: 'bg-emerald-500', b: 'bg-emerald-50 text-emerald-700 border-emerald-200', i: '42' },
+                                            { n: t('mock_lettuce'), s: 'harvestDue', c: 'bg-amber-500', b: 'bg-amber-50 text-amber-700 border-amber-200', i: '38' },
+                                            { n: 'Tomaten', s: 'harvestOverdue', c: 'bg-red-500', b: 'bg-red-50 text-red-700 border-red-200', i: '35' },
+                                            { n: 'Zucchini', s: 'growing', c: 'bg-emerald-500', b: 'bg-emerald-50 text-emerald-700 border-emerald-200', i: '45' },
                                         ].map((item, i) => (
-                                            <div key={i} className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center">
-                                                <div className="flex items-center gap-2.5">
-                                                    <div className={`w-1.5 h-6 rounded-full bg-${item.c}-500`}></div>
-                                                    <div>
-                                                        <div className="font-bold text-xs text-slate-800">{item.n}</div>
-                                                        <div className={`text-[9px] mt-0 font-medium text-${item.c}-600 leading-none`}>
-                                                            {t(item.s as any)}
-                                                        </div>
-                                                    </div>
+                                            <div key={i} className="bg-white p-2 rounded-lg border border-slate-100 shadow-sm flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                    {/* Status Dot */}
+                                                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.c}`}></div>
+                                                    
+                                                    {/* Name */}
+                                                    <span className="font-bold text-[10px] text-slate-700 truncate">{item.n}</span>
+                                                    
+                                                    {/* Status Badge */}
+                                                    <span className={`text-[8px] px-1.5 py-0.5 rounded-md ${item.b} border font-medium truncate`}>
+                                                        {t(item.s as any)}
+                                                    </span>
                                                 </div>
-                                                <div className="text-right bg-slate-50 px-1.5 py-0.5 rounded">
-                                                    <div className="font-mono text-[9px] text-slate-500 font-bold">KW {item.i}</div>
+                                                
+                                                {/* Week */}
+                                                <div className="text-right">
+                                                    <div className="font-mono text-[9px] text-slate-400 font-bold bg-slate-50 px-1 rounded">{t('weekAbbr')} {item.i}</div>
                                                 </div>
                                             </div>
                                         ))}
                                         {/* Fade out effect at bottom */}
-                                        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none"></div>
+                                        <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none"></div>
                                     </div>
                                 </div>
                                 
